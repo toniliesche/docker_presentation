@@ -1,0 +1,22 @@
+api:
+  dashboard: true
+
+entryPoints:
+  http:
+    address: ":80"
+    forwardedHeaders:
+      insecure: true
+  mariadb:
+    address: ":3306"
+
+log:
+  level: "ERROR"
+
+providers:
+  file:
+    filename: /config/config.yml
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: "phpughh_traefik"
+    defaultRule: "Host(`*`)"

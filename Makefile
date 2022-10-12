@@ -5,6 +5,8 @@ help:
 	@echo
 	@echo "\033[1;34mclean\033[0m - Clean wordpress data"
 	@echo "\033[1;34mcli\033[0m - Open shell inside wordpress_php container"
+	@echo "\033[1;34mcli-php81\033[0m - Open shell inside wordpress_php container"
+	@echo "\033[1;34mdocker-build-mariadb\033[0m - Build MariaDB image"
 	@echo "\033[1;34mdocker-build-php\033[0m - Build wordpress Docker image with required php extensions"
 	@echo "\033[1;34mdocker-build-php-dev\033[0m - Build wordpress Docker image with xdebug"
 	@echo "\033[1;34mdocker-build-php-7.4\033[0m - Build wordpress Docker image with 7.4"
@@ -19,13 +21,14 @@ help:
 	@echo "\033[1;34mmariadb-stop\033[0m - Stop running Docker MariaDB container"
 	@echo "\033[1;34mmariadb-volume\033[0m - Create volume for MariaDB"
 	@echo "\033[1;34mmariadb-with-volume\033[0m - Run simple Docker MariaDB container with data persistance volume in detached mode"
+	@echo "\033[1;34mtraefik-run\033[0m - Run traefik load balancer"
 	@echo "\033[1;34mvolumes\033[0m - Show existing volumes"
-	@echo "\033[1;34mwordpress-create-db\033[0m - Create database and user for wordpress"
-	@echo "\033[1;34mwordpress-run-simple\033[0m - Run simple wordpress example"
-	@echo "\033[1;34mwordpress-down\033[0m - Stop and clean wordpress example"
-	@echo "\033[1;34mwordpress-run\033[0m - Run wordpress example"
-	@echo "\033[1;34mwordpress-run-dev\033[0m - Run wordpress example with xdebug"
-	@echo "\033[1;34mwordpress-run-7.4\033[0m - Run wordpress example with php 7.4"
+	@echo "\033[1;34mwp-create-db\033[0m - Create database and user for wordpress"
+	@echo "\033[1;34mwp-run-simple\033[0m - Run simple wordpress example"
+	@echo "\033[1;34mwp-down\033[0m - Stop and clean wordpress example"
+	@echo "\033[1;34mwp-run\033[0m - Run wordpress example"
+	@echo "\033[1;34mwp-run-dev\033[0m - Run wordpress example with xdebug"
+	@echo "\033[1;34mwp-run-7.4\033[0m - Run wordpress example with php 7.4"
 	@echo
 
 clean:
@@ -39,6 +42,21 @@ cli:
 	@echo "\033[1;34mdocker exec -it wordpress_php /bin/sh\033[0m"
 	@echo
 	@docker exec -it wordpress_php /bin/sh
+	@echo
+
+cli-php81:
+	@echo
+	@echo "\033[1;34mdocker exec -it wordpress-php81-1 /bin/sh\033[0m"
+	@echo
+	@docker exec -it wordpress-php81-1 /bin/sh
+	@echo
+
+docker-build-mariadb:
+	@echo
+	@echo "\033[1;34mdocker build images/mariadb/ -t phpughh/mariadb:10.9\033[0m"
+	@echo
+	@docker build images/mariadb/ -t phpughh/mariadb:10.9
+	@echo
 	@echo
 
 docker-build-php:
@@ -144,6 +162,11 @@ mariadb-with-volume:
 	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy
 	@echo
 
+traefik-run:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik up -d --remove-orphans --always-recreate-deps\033[0m"
+	@docker compose -f docker-compose/docker-compose-traefik.yml -p traefik up -d --remove-orphans --always-recreate-deps
+
 volumes:
 	@echo
 	@echo "\033[1;34mdocker volume ls\033[0m"
@@ -151,7 +174,7 @@ volumes:
 	@docker volume ls
 	@echo
 
-wordpress-create-db:
+wp-create-db:
 	@echo
 	@echo mysql -uroot -pphpughh -e "CREATE DATABASE wordpress_phpughh"
 	@mysql -uroot -pphpughh -e "CREATE DATABASE wordpress_phpughh"
@@ -159,44 +182,56 @@ wordpress-create-db:
 	@mysql -uroot -pphpughh -e "GRANT ALL PRIVILEGES ON wordpress_phpughh.* TO wordpress@'%' IDENTIFIED BY 'phpughh'"
 	@echo
 
-wordpress-down:
+wp-down:
 	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/simple-wordpress.yml -p wordpress down\033[0m"
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress down\033[0m"
 	@echo
-	@docker compose -f docker-compose/simple-wordpress.yml -p wordpress down
+	@docker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress down
 	@echo
-	@echo
-
-wordpress-run:
-	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/simple-wordpress.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
-	@echo
-	@docker compose -f docker-compose/wordpress.yml -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
-wordpress-run-dev:
+wp-run:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-wp.yml -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo
+
+wp-run-dev:
 	@echo
 	@echo "echo XDEBUG_HOST=\$$(ifconfig docker0 | grep \"inet \" | awk '{print \$$2}') > .env"
 	@echo XDEBUG_HOST=$$(ifconfig docker0 | grep "inet " | awk '{print $$2}') > .env
 	@echo "echo XDEBUG_PORT=9000 >> .env"
 	@echo XDEBUG_PORT=9000 >> .env
 	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/wordpress-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
-	@docker compose -f docker-compose/wordpress-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@docker compose -f docker-compose/docker-compose-wp-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
-wordpress-run-simple:
+wp-run-simple:
 	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/simple-wordpress.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
 	@echo
-	@docker compose -f docker-compose/simple-wordpress.yml -p wordpress up -d --remove-orphans --always-recreate-deps
+	@docker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
-wordpress-run-7.4:
+wp-run-7.4:
 	@echo
 	@echo "echo PHP_VERSION=7.4 >> .env"
 	@echo PHP_VERSION=7.4 >> .env
 	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/wordpress-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
-	@docker compose -f docker-compose/wordpress-versioned.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-versioned.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@docker compose -f docker-compose/docker-compose-wp-versioned.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo
+
+wp-run-traefik:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@docker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo
+
+wp-down-traefik:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress down\033[0m"
+	@docker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress down
 	@echo

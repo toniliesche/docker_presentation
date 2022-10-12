@@ -10,7 +10,7 @@ volumes:
 
 configs:
   nginx_vhost:
-    file: ../configs/wordpress-simple.conf
+    file: ../configs/nginx/wordpress-simple.conf
 
 services:
   mariadb:
@@ -49,7 +49,7 @@ services:
 
   php:
     hostname: php
-    image: phpughh/php-fpm:${PHP_VERSION}
+    image: php:8.1-fpm-alpine
     depends_on:
       - mariadb
     volumes:

@@ -10,12 +10,12 @@ volumes:
 
 configs:
   nginx_vhost:
-    file: ../configs/wordpress-simple.conf
+    file: ../configs/nginx/wordpress-simple.conf
 
 services:
   mariadb:
     hostname: mariadb
-    image: mariadb:10.9-jammy
+    image: phpughh/mariadb:10.9
     volumes:
       - wordpress_mariadb_data:/var/lib/mysql
     networks:
