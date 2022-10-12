@@ -1,0 +1,17 @@
+# The name of your plugin as displayed in the Traefik Pilot web UI.
+displayName:  HTTP Request Logger for Traefik
+
+# For now, `middleware` is the only type available.
+type: middleware
+
+# The import path of your plugin.
+import: git.nfon.net/prov/traefik-access-log
+
+# A brief description of what your plugin is doing.
+summary: Write human readable http access logs
+
+# Configuration data for your plugin.
+# This is mandatory,
+# and Traefik Pilot will try to execute the plugin with the data you provide as part of its startup validity tests.
+testData:
+  LogPath: "/var/log/traefik-access.log"
