@@ -15,19 +15,13 @@ configs:
 services:
   mariadb:
     hostname: mariadb
-    image: phpughh/mariadb:10.9
+    image: mariadb:10.9-jammy
     volumes:
       - wordpress_mariadb_data:/var/lib/mysql
     networks:
       - default
     environment:
       - MYSQL_ROOT_PASSWORD=phpughh
-    healthcheck:
-      test: netstat -ltn | grep -q -c ":3306" || exit 1
-      interval: 10s
-      timeout: 3s
-      start_period: 5s
-      retries: 3
     ports:
       - "3306:3306"
 
@@ -39,7 +33,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ../apps/wordpress:/var/www/html/wordpress
+      - ~/phpughh/wordpress:/var/www/html/wordpress
     networks:
       - default
     configs:
@@ -53,6 +47,6 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ../apps/wordpress:/var/www/html/wordpress
+      - ~/phpughh/wordpress:/var/www/html/wordpress
     networks:
       - default

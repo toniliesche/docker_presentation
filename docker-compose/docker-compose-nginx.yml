@@ -1,0 +1,14 @@
+version: '3.5'
+
+networks:
+  default:
+    name: phpughh
+
+services:
+  nginx:
+    hostname: nginx
+    image: nginx:1.23-alpine
+    ports:
+      - "80:80"
+    networks:
+      - default

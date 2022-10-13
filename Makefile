@@ -4,8 +4,8 @@ help:
 	@echo "-------------"
 	@echo
 	@echo "\033[1;34mclean\033[0m - Clean wordpress data"
-	@echo "\033[1;34mcli\033[0m - Open shell inside wordpress_php container"
-	@echo "\033[1;34mcli-php81\033[0m - Open shell inside wordpress_php container"
+	@echo "\033[1;34mcli CT=<container name>\033[0m - Open shell inside wordpress_php container"
+	@echo "\033[1;34mdocker-build\033[0m - Build all containers"
 	@echo "\033[1;34mdocker-build-mariadb\033[0m - Build MariaDB image"
 	@echo "\033[1;34mdocker-build-php\033[0m - Build wordpress Docker image with required php extensions"
 	@echo "\033[1;34mdocker-build-php-dev\033[0m - Build wordpress Docker image with xdebug"
@@ -13,22 +13,29 @@ help:
 	@echo "\033[1;34mdocker-images\033[0m - Show existing Docker images"
 	@echo "\033[1;34mdocker-ps\033[0m - Show running Docker containers"
 	@echo "\033[1;34mdocker-psa\033[0m - Show all Docker containers"
-	@echo "\033[1;34mhttpd\033[0m - Run simple Docker Apache httpd container"
-	@echo "\033[1;34mhttpd-published\033[0m - Run simple Docker Apache httpd container with published port 80"
-	@echo "\033[1;34mhttpd-detached\033[0m - Run simple Docker Apache httpd container in detached mode"
-	@echo "\033[1;34mhttpd-stop\033[0m - Stop running Docker Apache httpd container"
+	@echo "\033[1;34mhw-run-simple\033[0m - Run simple hello world example"
+	@echo "\033[1;34mhw-down\033[0m - Stop and clean hello world example"
 	@echo "\033[1;34mmariadb-detached\033[0m - Run simple Docker MariaDB container in detached mode"
 	@echo "\033[1;34mmariadb-stop\033[0m - Stop running Docker MariaDB container"
 	@echo "\033[1;34mmariadb-volume\033[0m - Create volume for MariaDB"
 	@echo "\033[1;34mmariadb-with-volume\033[0m - Run simple Docker MariaDB container with data persistance volume in detached mode"
+	@echo "\033[1;34mnginx-run\033[0m - Run simple Docker nginx container"
+	@echo "\033[1;34mnginx-run-published\033[0m - Run simple Docker nginx container with published port 80"
+	@echo "\033[1;34mnginx-run-detached\033[0m - Run simple Docker nginx container in detached mode"
+	@echo "\033[1;34mnginx-run-compose\033[0m - Run simple Docker nginx container in docker compose mode"
+	@echo "\033[1;34mnginx-stop\033[0m - Stop running Docker nginx container"
+	@echo "\033[1;34mnginx-down\033[0m - Stop and clean running Docker nginx container in docker compose mode"
+	@echo "\033[1;34mtraefik-down\033[0m - Stop and clean traefik load balancer"
 	@echo "\033[1;34mtraefik-run\033[0m - Run traefik load balancer"
 	@echo "\033[1;34mvolumes\033[0m - Show existing volumes"
 	@echo "\033[1;34mwp-create-db\033[0m - Create database and user for wordpress"
-	@echo "\033[1;34mwp-run-simple\033[0m - Run simple wordpress example"
 	@echo "\033[1;34mwp-down\033[0m - Stop and clean wordpress example"
-	@echo "\033[1;34mwp-run\033[0m - Run wordpress example"
-	@echo "\033[1;34mwp-run-dev\033[0m - Run wordpress example with xdebug"
+	@echo "\033[1;34mwp-down-traefik\033[0m - Stop and clean wordpress example with Traefik frontend"
+	@echo "\033[1;34mwp-run-simple\033[0m - Run wordpress example"
 	@echo "\033[1;34mwp-run-7.4\033[0m - Run wordpress example with php 7.4"
+	@echo "\033[1;34mwp-run-dev\033[0m - Run wordpress example with xdebug"
+	@echo "\033[1;34mwp-run-simple\033[0m - Run simple wordpress example"
+	@echo "\033[1;34mwp-run-traefik\033[0m - Run wordpress example with Traefik frontend"
 	@echo
 
 clean:
@@ -36,20 +43,23 @@ clean:
 	@echo "\033[1;34mdocker volume rm wordpress_mariadb_data\033[0m"
 	@echo
 	@docker volume rm wordpress_mariadb_data
+	@echo
+
+clean-images:
+	@echo
+	@echo "\033[1;34mdocker volume rm wordpress_mariadb_data\033[0m"
+	@echo
+	@docker rmi traefik:2.9 php:7.4-fpm-alpine php:8.1-fpm-alpine nginx:1.23-alpine mariadb:10.9-jammy nginx:2.4
+	@echo
 
 cli:
 	@echo
-	@echo "\033[1;34mdocker exec -it wordpress_php /bin/sh\033[0m"
+	@echo "\033[1;34mdocker exec -it ${CT} /bin/sh\033[0m"
 	@echo
-	@docker exec -it wordpress_php /bin/sh
+	@docker exec -it ${CT} /bin/sh
 	@echo
 
-cli-php81:
-	@echo
-	@echo "\033[1;34mdocker exec -it wordpress-php81-1 /bin/sh\033[0m"
-	@echo
-	@docker exec -it wordpress-php81-1 /bin/sh
-	@echo
+docker-build: docker-build-php docker-build-php-dev docker-build-php-7.4 docker-build-mariadb
 
 docker-build-mariadb:
 	@echo
@@ -61,9 +71,9 @@ docker-build-mariadb:
 
 docker-build-php:
 	@echo
-	@echo "\033[1;34mdocker build images/php-fpm/ -t phpughh/php-fpm:8.1\033[0m"
+	@echo "\033[1;34mdocker build images/php-fpm-8.1/ -t phpughh/php-fpm:8.1\033[0m"
 	@echo
-	@docker build images/php-fpm/ -t phpughh/php-fpm:8.1
+	@docker build images/php-fpm-8.1/ -t phpughh/php-fpm:8.1
 	@echo
 
 docker-build-php-7.4:
@@ -79,9 +89,9 @@ docker-build-php-7.4:
 
 docker-build-php-dev:
 	@echo
-	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker build images/php-fpm-dev/ -t phpughh/php-fpm:8.1-dev\033[0m"
+	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/php-fpm:8.1-dev\033[0m"
 	@echo
-	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev/ -t phpughh/php-fpm:8.1-dev
+	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/php-fpm:8.1-dev
 	@echo
 
 docker-images:
@@ -105,32 +115,19 @@ docker-psa:
 	@docker ps -a | grep -v nfon | grep -v toni
 	@echo
 
-httpd:
+hw-down:
 	@echo
-	@echo "\033[1;34mdocker run --name apache --rm httpd:2.4\033[0m"
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-hello-world.yml -p helloworld down\033[0m"
 	@echo
-	@docker run --name apache --rm httpd:2.4
+	@docker compose -f docker-compose/docker-compose-hello-world.yml -p helloworld down
 	@echo
-
-httpd-published:
-	@echo
-	@echo "\033[1;34mdocker run --name apache --rm -p 80:80 httpd:2.4\033[0m"
-	@echo
-	@docker run --name apache --rm -p 80:80 httpd:2.4
 	@echo
 
-httpd-detached:
+hw-run:
 	@echo
-	@echo "\033[1;34mdocker run --name apache --rm -p 80:80 -d httpd:2.4\033[0m"
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-hello-world.yml -p helloworld up -d --remove-orphans --always-recreate-deps\033[0m"
 	@echo
-	@docker run --name apache --rm -p 80:80 -d httpd:2.4
-	@echo
-
-httpd-stop:
-	@echo
-	@echo "\033[1;34mdocker stop apache\033[0m"
-	@echo
-	@docker stop apache
+	@docker compose -f docker-compose/docker-compose-hello-world.yml -p helloworld up -d --remove-orphans --always-recreate-deps
 	@echo
 
 mariadb-detached:
@@ -162,6 +159,54 @@ mariadb-with-volume:
 	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy
 	@echo
 
+nginx-down:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-nginx.yml -p nginx down\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-nginx.yml -p nginx down
+	@echo
+	@echo
+
+nginx-run:
+	@echo
+	@echo "\033[1;34mdocker run --name nginx --rm nginx:1.23-alpine\033[0m"
+	@echo
+	@docker run --name nginx --rm nginx:1.23-alpine
+	@echo
+
+nginx-run-compose:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-nginx.yml -p nginx up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-nginx.yml -p nginx up -d --remove-orphans --always-recreate-deps
+	@echo
+
+nginx-run-published:
+	@echo
+	@echo "\033[1;34mdocker run --name nginx --rm -p 80:80 nginx:1.23-alpine\033[0m"
+	@echo
+	@docker run --name nginx --rm -p 80:80 nginx:1.23-alpine
+	@echo
+
+nginx-run-detached:
+	@echo
+	@echo "\033[1;34mdocker run --name nginx --rm -p 80:80 -d nginx:1.23-alpine\033[0m"
+	@echo
+	@docker run --name nginx --rm -p 80:80 -d nginx:1.23-alpine
+	@echo
+
+nginx-stop:
+	@echo
+	@echo "\033[1;34mdocker stop nginx\033[0m"
+	@echo
+	@docker stop nginx
+	@echo
+
+traefik-down:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik down\033[0m"
+	@docker compose -f docker-compose/docker-compose-traefik.yml -p traefik down
+
 traefik-run:
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik up -d --remove-orphans --always-recreate-deps\033[0m"
@@ -184,13 +229,13 @@ wp-create-db:
 
 wp-down:
 	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress down\033[0m"
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp.yml -p wordpress down\033[0m"
 	@echo
-	@docker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress down
+	@docker compose -f docker-compose/docker-compose-wp.yml -p wordpress down
 	@echo
 	@echo
 
-wp-run:
+wp-run-simple:
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
 	@echo
@@ -206,13 +251,6 @@ wp-run-dev:
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
 	@docker compose -f docker-compose/docker-compose-wp-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
-	@echo
-
-wp-run-simple:
-	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
-	@echo
-	@docker compose -f docker-compose/docker-compose-wp-simple.yml -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
 wp-run-7.4:
@@ -235,3 +273,5 @@ wp-down-traefik:
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress down\033[0m"
 	@docker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress down
 	@echo
+
+wp-run: docker-build mariadb-volume traefik-run wp-run-traefik wp-create-db
