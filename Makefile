@@ -10,21 +10,31 @@ help:
 	@echo "\033[1;34mdocker-build-php\033[0m - Build wordpress Docker image with required php extensions"
 	@echo "\033[1;34mdocker-build-php-dev\033[0m - Build wordpress Docker image with xdebug"
 	@echo "\033[1;34mdocker-build-php-7.4\033[0m - Build wordpress Docker image with 7.4"
+	@echo "\033[1;34mdocker-build-traefik\033[0m - Build Traefik Docker image with middleware addition"
 	@echo "\033[1;34mdocker-images\033[0m - Show existing Docker images"
+	@echo "\033[1;34mdocker-network-create\033[0m - Create new Docker network"
+	@echo "\033[1;34mdocker-network-ls\033[0m - List existing Docker networks"
+	@echo "\033[1;34mdocker-network-inspect\033[0m - Show details of existing Docker network"
 	@echo "\033[1;34mdocker-ps\033[0m - Show running Docker containers"
 	@echo "\033[1;34mdocker-psa\033[0m - Show all Docker containers"
 	@echo "\033[1;34mhw-run-simple\033[0m - Run simple hello world example"
 	@echo "\033[1;34mhw-down\033[0m - Stop and clean hello world example"
-	@echo "\033[1;34mmariadb-detached\033[0m - Run simple Docker MariaDB container in detached mode"
+	@echo "\033[1;34mmariadb\033[0m - Connect to mariadb database using cli tool"
+	@echo "\033[1;34mmariadb-run\033[0m - Run simple Docker MariaDB container"
+	@echo "\033[1;34mmariadb-run-persistent\033[0m - Run simple Docker MariaDB container with data persistance volume in detached mode"
 	@echo "\033[1;34mmariadb-stop\033[0m - Stop running Docker MariaDB container"
-	@echo "\033[1;34mmariadb-volume\033[0m - Create volume for MariaDB"
-	@echo "\033[1;34mmariadb-with-volume\033[0m - Run simple Docker MariaDB container with data persistance volume in detached mode"
-	@echo "\033[1;34mnginx-run\033[0m - Run simple Docker nginx container"
-	@echo "\033[1;34mnginx-run-published\033[0m - Run simple Docker nginx container with published port 80"
-	@echo "\033[1;34mnginx-run-detached\033[0m - Run simple Docker nginx container in detached mode"
-	@echo "\033[1;34mnginx-run-compose\033[0m - Run simple Docker nginx container in docker compose mode"
-	@echo "\033[1;34mnginx-stop\033[0m - Stop running Docker nginx container"
-	@echo "\033[1;34mnginx-down\033[0m - Stop and clean running Docker nginx container in docker compose mode"
+	@echo "\033[1;34mmariadb-volume-create\033[0m - Create volume for MariaDB"
+	@echo "\033[1;34mmariadb-volume-show\033[0m - Show volume content for MariaDB inside file system"
+	@echo "\033[1;34mnginx-inspect\033[0m - Inspect running Docker Nginx container"
+	@echo "\033[1;34mnginx-inspect-network\033[0m - Inspect running Docker Nginx container with format directive"
+	@echo "\033[1;34mnginx-run\033[0m - Run simple Docker Nginx container"
+	@echo "\033[1;34mnginx-run-published\033[0m - Run simple Docker Nginx container with published port 80"
+	@echo "\033[1;34mnginx-run-detached\033[0m - Run simple Docker Nginx container in detached mode"
+	@echo "\033[1;34mnginx-run-compose\033[0m - Run simple Docker Nginx container in docker compose mode"
+	@echo "\033[1;34mnginx-run-compose-detached\033[0m - Run simple Docker Nginx container in detached docker compose mode"
+	@echo "\033[1;34mnginx-stop\033[0m - Stop running Docker Nginx container"
+	@echo "\033[1;34mnginx-down\033[0m - Stop and clean running Docker Nginx container in docker compose mode"
+	@echo "\033[1;34mnginx-lgs\033[0m - Show logs of Docker Nginx container"
 	@echo "\033[1;34mtraefik-down\033[0m - Stop and clean traefik load balancer"
 	@echo "\033[1;34mtraefik-run\033[0m - Run traefik load balancer"
 	@echo "\033[1;34mvolumes\033[0m - Show existing volumes"
@@ -37,6 +47,52 @@ help:
 	@echo "\033[1;34mwp-run-simple\033[0m - Run simple wordpress example"
 	@echo "\033[1;34mwp-run-traefik\033[0m - Run wordpress example with Traefik frontend"
 	@echo
+
+ngxr: nginx-run
+ngxrp: nginx-run-published
+ngxrd: nginx-run-detached
+ngxs: nginx-stop
+ngxi: nginx-inspect
+ngxin: nginx-inspect-network
+ngxl: nginx-logs
+
+ngxcr: nginx-run-compose
+ngxcrd: nginx-run-compose-detached
+ngxcd: nginx-down
+
+hwr: hw-run
+hwrt: hw-run-traefik
+hwd: hw-down
+
+mdbr: mariadb-run
+mdbv: mariadb-volume-create
+mdbrp: mariadb-run-persistent
+mdbs: mariadb-stop
+mdb: mariadb
+
+di: docker-images
+dbmdb: docker-build-mariadb
+dps: docker-ps
+dpsa: docker-psa
+dnc: docker-network-create
+dnl: docker-network-ls
+dni: docker-network-inspect
+dl: docker-logs
+
+dbp: docker-build-php
+dbpd: docker-build-php-dev
+dbp7: docker-build-php-7.4
+dbtr: docker-build-traefik
+
+wpr: wp-run-simple
+wprd: wp-run-dev
+wpr7: wp-run-7.4
+wprt: wp-run-traefik
+wpd: wp-down
+wpdt: wp-down-traefik
+
+trr: traefik-run
+trd: traefik-down
 
 clean:
 	@echo
@@ -57,6 +113,14 @@ cli:
 	@echo "\033[1;34mdocker exec -it ${CT} /bin/sh\033[0m"
 	@echo
 	@docker exec -it ${CT} /bin/sh
+	@echo
+
+docker-logs:
+	@echo
+	@echo "\033[1;34mdocker logs -f ${CT}\033[0m"
+	@echo
+	@docker logs -f ${CT}
+	@echo
 	@echo
 
 docker-build: docker-build-php docker-build-php-dev docker-build-php-7.4 docker-build-mariadb
@@ -82,7 +146,7 @@ docker-build-php-7.4:
 	@echo
 	@docker build images/php-fpm/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4
 	@echo
-	@echo "\033[1;34mdocker build images/php-fpm-dev/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4-dev\033[0m"
+	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker build images/php-fpm-dev/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4-dev\033[0m"
 	@echo
 	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4-dev
 	@echo
@@ -94,11 +158,39 @@ docker-build-php-dev:
 	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/php-fpm:8.1-dev
 	@echo
 
+docker-build-traefik:
+	@echo
+	@echo "\033[1;34mdocker build images/traefik/ -t phpughh/traefik:2.9\033[0m"
+	@echo
+	@docker build images/traefik/ -t phpughh/traefik:2.9
+	@echo
+
 docker-images:
 	@echo
 	@echo "\033[1;34mdocker images\033[0m"
 	@echo
 	@docker images | grep -v nfon | grep -v toni
+	@echo
+
+docker-network-create:
+	@echo
+	@echo "\033[1;34mdocker network create phpughh\033[0m"
+	@echo
+	@docker network create phpughh
+	@echo
+
+docker-network-ls:
+	@echo
+	@echo "\033[1;34mdocker network ls\033[0m"
+	@echo
+	@docker network ls | grep -v nfon | grep -v toni
+	@echo
+
+docker-network-inspect:
+	@echo
+	@echo "\033[1;34mdocker network inspect phpughh\033[0m"
+	@echo
+	@docker network inspect phpughh
 	@echo
 
 docker-ps:
@@ -130,11 +222,32 @@ hw-run:
 	@docker compose -f docker-compose/docker-compose-hello-world.yml -p helloworld up -d --remove-orphans --always-recreate-deps
 	@echo
 
-mariadb-detached:
+hw-run-traefik:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-hello-world-traefik.yml -p helloworld up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-hello-world-traefik.yml -p helloworld up -d --remove-orphans --always-recreate-deps
+	@echo
+
+mariadb:
+	@echo
+	@echo "\033[1;34mmysql -uroot -pphpughh\033[0m"
+	@echo
+	@mysql -uroot -pphpughh
+	@echo
+
+mariadb-run:
 	@echo
 	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh mariadb:10.9-jammy\033[0m"
 	@echo
 	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh mariadb:10.9-jammy
+	@echo
+
+mariadb-run-persistent:
+	@echo
+	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy\033[0m"
+	@echo
+	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy
 	@echo
 
 mariadb-stop:
@@ -145,18 +258,26 @@ mariadb-stop:
 	@echo
 	@echo
 
-mariadb-volume:
+mariadb-volume-create:
 	@echo
 	@echo "\033[1;34mdocker volume create wordpress_mariadb_data\033[0m"
 	@echo
 	@docker volume create wordpress_mariadb_data
 	@echo
 
-mariadb-with-volume:
+mariadb-volume-show:
 	@echo
-	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy\033[0m"
+	@echo "\033[1;34msudo ls -lA /var/lib/docker/volumes/wordpress_mariadb_data/_data\033[0m"
 	@echo
-	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy
+	@sudo ls -lA /var/lib/docker/volumes/wordpress_mariadb_data/_data
+	@echo
+
+nginx-logs:
+	@echo
+	@echo "\033[1;34mdocker logs -f nginx\033[0m"
+	@echo
+	@docker logs -f nginx
+	@echo
 	@echo
 
 nginx-down:
@@ -167,6 +288,20 @@ nginx-down:
 	@echo
 	@echo
 
+nginx-inspect:
+	@echo
+	@echo "\033[1;34mdocker inspect nginx\033[0m"
+	@echo
+	@docker inspect nginx
+	@echo
+
+nginx-inspect-network:
+	@echo
+	@echo "\033[1;34mdocker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nginx\033[0m"
+	@echo
+	@docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nginx
+	@echo
+
 nginx-run:
 	@echo
 	@echo "\033[1;34mdocker run --name nginx --rm nginx:1.23-alpine\033[0m"
@@ -175,6 +310,13 @@ nginx-run:
 	@echo
 
 nginx-run-compose:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-nginx.yml -p nginx up --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-nginx.yml -p nginx up --remove-orphans --always-recreate-deps
+	@echo
+
+nginx-run-compose-detached:
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-nginx.yml -p nginx up -d --remove-orphans --always-recreate-deps\033[0m"
 	@echo

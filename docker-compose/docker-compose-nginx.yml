@@ -3,6 +3,7 @@ version: '3.5'
 networks:
   default:
     name: phpughh
+    external: true
 
 services:
   nginx:

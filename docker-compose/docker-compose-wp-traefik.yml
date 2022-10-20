@@ -3,8 +3,10 @@ version: '3.5'
 networks:
   default:
     name: phpughh
+    external: true
   traefik:
     name: phpughh_traefik
+    external: true
 
 volumes:
   wordpress_mariadb_data:
@@ -81,6 +83,12 @@ services:
       - ~/phpughh/wordpress:/var/www/html/wordpress
     networks:
       - default
+    healthcheck:
+      test: netstat -ltn | grep -q -c ":9000" || exit 1
+      interval: 10s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
 
   php81:
     hostname: php-81

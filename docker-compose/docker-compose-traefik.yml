@@ -3,6 +3,7 @@ version: '3.5'
 networks:
   default:
     name: phpughh_traefik
+    external: true
 
 configs:
   traefik_static:

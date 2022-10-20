@@ -5,7 +5,7 @@ displayName:  HTTP Request Logger for Traefik
 type: middleware
 
 # The import path of your plugin.
-import: git.nfon.net/prov/traefik-access-log
+import: git.toniliesche.de/tliesche/traefik-access-log
 
 # A brief description of what your plugin is doing.
 summary: Write human readable http access logs

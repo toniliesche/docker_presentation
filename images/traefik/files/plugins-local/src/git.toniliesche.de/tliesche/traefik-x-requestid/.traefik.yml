@@ -1,0 +1,18 @@
+# The name of your plugin as displayed in the Traefik Pilot web UI.
+displayName:  HTTP X Request ID Header for Traefik
+
+# For now, `middleware` is the only type available.
+type: middleware
+
+# The import path of your plugin.
+import: git.toniliesche.de/tliesche/traefik-x-requestid
+
+# A brief description of what your plugin is doing.
+summary: Create HTTP-X-Request ID header with unique request id
+
+# Configuration data for your plugin.
+# This is mandatory,
+# and Traefik Pilot will try to execute the plugin with the data you provide as part of its startup validity tests.
+testData:
+  HeaderKey: X-REFERRAL-ID
+  HeaderPrefix: phpughh

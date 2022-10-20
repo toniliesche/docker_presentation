@@ -15,8 +15,6 @@ services:
     image: nginx:1.23-alpine
     depends_on:
       - php
-    ports:
-      - "80:80"
     volumes:
       - ~/phpughh/hello_world:/var/www/html/hello_world
     networks:
@@ -25,6 +23,13 @@ services:
       - source: nginx_vhost
         target: /etc/nginx/conf.d/default.conf
         mode: 0644
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.services.nginx-svc.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx.entrypoints=http"
+      - "traefik.http.routers.nginx.rule=HostRegexp(`helloworld.phpug.hh`)"
+      - "traefik.http.routers.nginx.service=nginx-svc"
 
   php:
     hostname: php
