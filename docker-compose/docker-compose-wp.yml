@@ -16,7 +16,7 @@ configs:
 services:
   mariadb:
     hostname: mariadb
-    image: mariadb:10.9-jammy
+    image: mariadb:10.6-focal
     volumes:
       - wordpress_mariadb_data:/var/lib/mysql
     networks:

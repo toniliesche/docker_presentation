@@ -105,7 +105,7 @@ clean-images:
 	@echo
 	@echo "\033[1;34mdocker volume rm wordpress_mariadb_data\033[0m"
 	@echo
-	@docker rmi traefik:2.9 php:7.4-fpm-alpine php:8.1-fpm-alpine nginx:1.23-alpine mariadb:10.9-jammy nginx:2.4
+	@docker rmi traefik:2.9 php:7.4-fpm-alpine php:8.1-fpm-alpine nginx:1.23-alpine mariadb:10.6-focal nginx:2.4
 	@echo
 
 cli:
@@ -127,9 +127,9 @@ docker-build: docker-build-php docker-build-php-dev docker-build-php-7.4 docker-
 
 docker-build-mariadb:
 	@echo
-	@echo "\033[1;34mdocker build images/mariadb/ -t phpughh/mariadb:10.9\033[0m"
+	@echo "\033[1;34mdocker build images/mariadb/ -t phpughh/mariadb:10.6\033[0m"
 	@echo
-	@docker build images/mariadb/ -t phpughh/mariadb:10.9
+	@docker build images/mariadb/ -t phpughh/mariadb:10.6
 	@echo
 	@echo
 
@@ -231,23 +231,23 @@ hw-run-traefik:
 
 mariadb:
 	@echo
-	@echo "\033[1;34mmysql -uroot -pphpughh\033[0m"
+	@echo "\033[1;34mmysql -h 127.0.0.1 -uroot -pphpughh\033[0m"
 	@echo
-	@mysql -uroot -pphpughh
+	@mysql -h 127.0.0.1 -uroot -pphpughh
 	@echo
 
 mariadb-run:
 	@echo
-	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh mariadb:10.9-jammy\033[0m"
+	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh mariadb:10.6-focal\033[0m"
 	@echo
-	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh mariadb:10.9-jammy
+	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh mariadb:10.6-focal
 	@echo
 
 mariadb-run-persistent:
 	@echo
-	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy\033[0m"
+	@echo "\033[1;34mdocker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.6-focal\033[0m"
 	@echo
-	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.9-jammy
+	@docker run --name mariadb --rm -p 3306:3306 -d --env MARIADB_ROOT_PASSWORD=phpughh -v wordpress_mariadb_data:/var/lib/mysql mariadb:10.6-focal
 	@echo
 
 mariadb-stop:
@@ -363,10 +363,10 @@ volumes:
 
 wp-create-db:
 	@echo
-	@echo mysql -uroot -pphpughh -e "CREATE DATABASE wordpress_phpughh"
-	@mysql -uroot -pphpughh -e "CREATE DATABASE wordpress_phpughh"
-	@echo mysql -uroot -pphpughh -e "GRANT ALL PRIVILEGES ON wordpress_phpughh.* TO wordpress@'%' IDENTIFIED BY 'phpughh'"
-	@mysql -uroot -pphpughh -e "GRANT ALL PRIVILEGES ON wordpress_phpughh.* TO wordpress@'%' IDENTIFIED BY 'phpughh'"
+	@echo mysql -h 127.0.0.1 -uroot -pphpughh -e "CREATE DATABASE wordpress_phpughh"
+	@mysql -h 127.0.0.1 -uroot -pphpughh -e "CREATE DATABASE wordpress_phpughh"
+	@echo mysql -h 127.0.0.1 -uroot -pphpughh -e "GRANT ALL PRIVILEGES ON wordpress_phpughh.* TO wordpress@'%' IDENTIFIED BY 'phpughh'"
+	@mysql -h 127.0.0.1 -uroot -pphpughh -e "GRANT ALL PRIVILEGES ON wordpress_phpughh.* TO wordpress@'%' IDENTIFIED BY 'phpughh'"
 	@echo
 
 wp-down:
