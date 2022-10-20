@@ -1,0 +1,41 @@
+version: '3.5'
+
+networks:
+  default:
+    name: phpughh_traefik
+    external: true
+
+configs:
+  traefik_static:
+    file: ../configs/traefik/config_static_extended.yml
+  traefik_dynamic:
+    file: ../configs/traefik/config_dynamic_extended.yml
+
+services:
+  traefik:
+    hostname: traefik
+    image: phpughh/traefik:2.9
+    networks:
+      default:
+        aliases:
+          - mariadb.phpughh
+    configs:
+      - source: traefik_static
+        target: /traefik.yml
+        mode: 0644
+      - source: traefik_dynamic
+        target: /config/config.yml
+        mode: 0644
+    ports:
+      - "80:80"
+      - "3306:3306"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    privileged: true
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.services.api-svc.loadbalancer.server.port=9999"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.phpug.hh`)"
+      - "traefik.http.routers.traefik.service=api@internal"

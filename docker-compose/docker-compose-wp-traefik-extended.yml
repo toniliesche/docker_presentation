@@ -74,6 +74,7 @@ services:
       - "traefik.http.routers.wordpress.entrypoints=http"
       - "traefik.http.routers.wordpress.rule=HostRegexp(`wordpress-php{phpversion:[0-9]+}.phpug.hh`,`localhost`)"
       - "traefik.http.routers.wordpress.service=wordpress-svc"
+      - "traefik.http.routers.wordpress.middlewares=x-requestid@file,access-log@file"
 
   php74:
     hostname: php-74

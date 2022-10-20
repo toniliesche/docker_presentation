@@ -1,3 +1,18 @@
+UNAME := $(shell uname -a)
+ifneq (,$(findstring microsoft,$(UNAME)))
+	LINUX_MODE := "wsl"
+else
+    LINUX_MODE := "native"
+endif
+
+ifeq ($(LINUX_MODE), "wsl")
+setup-xdebug: setup-xdebug-wsl
+else ifeq ($(LINUX_MODE), "vm")
+setup-xdebug: setup-xdebug-vm
+else
+setup-xdebug: setup-xdebug-native
+endif
+
 help:
 	@echo
 	@echo "Command List:"
@@ -62,6 +77,7 @@ ngxcd: nginx-down
 
 hwr: hw-run
 hwrt: hw-run-traefik
+hwrte: hw-run-traefik-extended
 hwd: hw-down
 
 mdbr: mariadb-run
@@ -88,10 +104,13 @@ wpr: wp-run-simple
 wprd: wp-run-dev
 wpr7: wp-run-7.4
 wprt: wp-run-traefik
+wprte: wp-run-traefik-extended
+wpdbs: wp-create-db
 wpd: wp-down
 wpdt: wp-down-traefik
 
 trr: traefik-run
+trre: traefik-run-extended
 trd: traefik-down
 
 clean:
@@ -177,6 +196,7 @@ docker-network-create:
 	@echo "\033[1;34mdocker network create phpughh\033[0m"
 	@echo
 	@docker network create phpughh
+	@docker network create phpughh_traefik
 	@echo
 
 docker-network-ls:
@@ -227,6 +247,13 @@ hw-run-traefik:
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-hello-world-traefik.yml -p helloworld up -d --remove-orphans --always-recreate-deps\033[0m"
 	@echo
 	@docker compose -f docker-compose/docker-compose-hello-world-traefik.yml -p helloworld up -d --remove-orphans --always-recreate-deps
+	@echo
+
+hw-run-traefik-extended:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-hello-world-traefik-extended.yml -p helloworld up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-hello-world-traefik-extended.yml -p helloworld up -d --remove-orphans --always-recreate-deps
 	@echo
 
 mariadb:
@@ -349,10 +376,36 @@ traefik-down:
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik down\033[0m"
 	@docker compose -f docker-compose/docker-compose-traefik.yml -p traefik down
 
+setup-xdebug-native:
+	@echo
+	@echo "echo XDEBUG_HOST=\$$(ifconfig docker0 | grep \"inet \" | awk '{print \$$2}') > .env"
+	@echo XDEBUG_HOST=$$(ifconfig docker0 | grep "inet " | awk '{print $$2}') > .env
+	@echo "echo XDEBUG_PORT=9000 >> .env"
+	@echo XDEBUG_PORT=9000 >> .env
+
+setup-xdebug-vm:
+	@echo
+	@echo "echo XDEBUG_HOST=\$$(cat /etc/resolv.conf | grep nameserver | awk '{print \$$2}') > .env"
+	@echo XDEBUG_HOST=$$(cat /etc/resolv.conf | grep nameserver | awk '{print $$2}') > .env
+	@echo "echo XDEBUG_PORT=9000 >> .env"
+	@echo XDEBUG_PORT=9000 >> .env
+
+setup-xdebug-wsl:
+	@echo
+	@echo "echo XDEBUG_HOST=\$$(ifconfig eth0 | grep \"inet \" | awk '{print \$$2}') > .env"
+	@echo XDEBUG_HOST=$$(ifconfig eth0 | grep "inet " | awk '{print $$2}') > .env
+	@echo "echo XDEBUG_PORT=9000 >> .env"
+	@echo XDEBUG_PORT=9000 >> .env
+
 traefik-run:
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik up -d --remove-orphans --always-recreate-deps\033[0m"
 	@docker compose -f docker-compose/docker-compose-traefik.yml -p traefik up -d --remove-orphans --always-recreate-deps
+
+traefik-run-extended:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik-extended.yml -p traefik up -d --remove-orphans --always-recreate-deps\033[0m"
+	@docker compose -f docker-compose/docker-compose-traefik-extended.yml -p traefik up -d --remove-orphans --always-recreate-deps
 
 volumes:
 	@echo
@@ -384,12 +437,7 @@ wp-run-simple:
 	@docker compose -f docker-compose/docker-compose-wp.yml -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
-wp-run-dev:
-	@echo
-	@echo "echo XDEBUG_HOST=\$$(ifconfig docker0 | grep \"inet \" | awk '{print \$$2}') > .env"
-	@echo XDEBUG_HOST=$$(ifconfig docker0 | grep "inet " | awk '{print $$2}') > .env
-	@echo "echo XDEBUG_PORT=9000 >> .env"
-	@echo XDEBUG_PORT=9000 >> .env
+wp-run-dev: setup-xdebug
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
 	@docker compose -f docker-compose/docker-compose-wp-dev.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
@@ -408,6 +456,12 @@ wp-run-traefik:
 	@echo
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
 	@docker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo
+
+wp-run-traefik-extended:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-traefik-extended.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@docker compose -f docker-compose/docker-compose-wp-traefik-extended.yml --env-file .env -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
 wp-down-traefik:

@@ -1,0 +1,15 @@
+http:
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    x-requestid:
+      plugin:
+        x-requestid:
+          HeaderKey: "X-REFERRAL-ID"
+          HeaderPrefix: "phpughh"
+    access-log:
+      plugin:
+        access-log:
+          LogPath: "/var/log/traefik-access.log"

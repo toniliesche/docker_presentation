@@ -4,6 +4,9 @@ networks:
   default:
     name: phpughh
     external: true
+  traefik:
+    name: phpughh_traefik
+    external: true
 
 configs:
   nginx_vhost:
@@ -15,16 +18,23 @@ services:
     image: nginx:1.23-alpine
     depends_on:
       - php
-    ports:
-      - "80:80"
     volumes:
       - ~/phpughh/hello_world:/var/www/html/hello_world
     networks:
       - default
+      - traefik
     configs:
       - source: nginx_vhost
         target: /etc/nginx/conf.d/default.conf
         mode: 0644
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.services.helloworld-svc.loadbalancer.server.port=80"
+      - "traefik.http.routers.helloworld.entrypoints=http"
+      - "traefik.http.routers.helloworld.rule=HostRegexp(`helloworld.phpug.hh`)"
+      - "traefik.http.routers.helloworld.service=helloworld-svc"
+      - "traefik.http.routers.helloworld.middlewares=x-requestid@file,access-log@file"
 
   php:
     hostname: php

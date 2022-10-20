@@ -4,6 +4,9 @@ networks:
   default:
     name: phpughh
     external: true
+  traefik:
+    name: phpughh_traefik
+    external: true
 
 configs:
   nginx_vhost:
@@ -19,6 +22,7 @@ services:
       - ~/phpughh/hello_world:/var/www/html/hello_world
     networks:
       - default
+      - traefik
     configs:
       - source: nginx_vhost
         target: /etc/nginx/conf.d/default.conf
@@ -26,16 +30,14 @@ services:
     labels:
       - "traefik.enable=true"
 
-      - "traefik.http.services.nginx-svc.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx.entrypoints=http"
-      - "traefik.http.routers.nginx.rule=HostRegexp(`helloworld.phpug.hh`)"
-      - "traefik.http.routers.nginx.service=nginx-svc"
+      - "traefik.http.services.helloworld-svc.loadbalancer.server.port=80"
+      - "traefik.http.routers.helloworld.entrypoints=http"
+      - "traefik.http.routers.helloworld.rule=HostRegexp(`helloworld.phpug.hh`)"
+      - "traefik.http.routers.helloworld.service=helloworld-svc"
 
   php:
     hostname: php
     image: php:8.1-fpm-alpine
-    depends_on:
-      - mariadb
     volumes:
       - ~/phpughh/hello_world:/var/www/html/hello_world
     networks:
