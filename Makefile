@@ -76,8 +76,6 @@ ngxcrd: nginx-run-compose-detached
 ngxcd: nginx-down
 
 hwr: hw-run
-hwrt: hw-run-traefik
-hwrte: hw-run-traefik-extended
 hwd: hw-down
 
 mdbr: mariadb-run
@@ -103,15 +101,19 @@ dbtr: docker-build-traefik
 wpr: wp-run-simple
 wprd: wp-run-dev
 wpr7: wp-run-7.4
-wprt: wp-run-traefik
-wprte: wp-run-traefik-extended
+wprt: wp-run-traefik hw-run-traefik
+wprw: wp-run-windows
+wprds: wp-run-docker-sync
 wpdbs: wp-create-db
 wpd: wp-down
 wpdt: wp-down-traefik
+wpds: wp-docker-sync
+wpdss: wp-down wp-docker-sync-stop
 
 trr: traefik-run
-trre: traefik-run-extended
+trre: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
 trd: traefik-down
+trde: traefik-down wp-down hw-down
 
 clean:
 	@echo
@@ -435,6 +437,34 @@ wp-run-simple:
 	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
 	@echo
 	@docker compose -f docker-compose/docker-compose-wp.yml -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo
+
+wp-run-windows:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-win.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-wp-win.yml -p wordpress up -d --remove-orphans --always-recreate-deps
+	@echo
+
+wp-docker-sync:
+	@echo
+	@echo "\033[1;34mdocker-sync start -c ~/phpughh/wordpress_win/docker-sync.yml\033[0m"
+	@echo
+	@docker-sync start -c ~/phpughh/wordpress_win/docker-sync.yml
+	@echo
+
+wp-docker-sync-stop:
+	@echo
+	@echo "\033[1;34mdocker-sync stop -c ~/phpughh/wordpress_win/docker-sync.yml\033[0m"
+	@echo
+	@docker-sync stop -c ~/phpughh/wordpress_win/docker-sync.yml
+	@echo
+
+wp-run-docker-sync:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-wp-docker-sync.yml -p wordpress up -d --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-wp-docker-sync.yml -p wordpress up -d --remove-orphans --always-recreate-deps
 	@echo
 
 wp-run-dev: setup-xdebug

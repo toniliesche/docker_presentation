@@ -1,0 +1,53 @@
+version: '3.5'
+
+networks:
+  default:
+    name: phpughh
+    external: true
+
+volumes:
+  wordpress_mariadb_data:
+    external: true
+
+configs:
+  nginx_vhost:
+    file: ../configs/nginx/wordpress-simple.conf
+
+services:
+  mariadb:
+    hostname: mariadb
+    image: mariadb:10.6-focal
+    volumes:
+      - wordpress_mariadb_data:/var/lib/mysql
+    networks:
+      - default
+    environment:
+      - MYSQL_ROOT_PASSWORD=phpughh
+    ports:
+      - "3306:3306"
+
+  nginx:
+    hostname: nginx
+    image: nginx:1.23-alpine
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - ~/phpughh/wordpress_win:/var/www/html/wordpress
+    networks:
+      - default
+    configs:
+      - source: nginx_vhost
+        target: /etc/nginx/conf.d/default.conf
+        mode: 0644
+
+  php:
+    hostname: php
+    image: phpughh/php-fpm:8.1
+    depends_on:
+      - mariadb
+    volumes:
+      - ~/phpughh/wordpress_win:/var/www/html/wordpress
+    networks:
+      - default

@@ -8,8 +8,6 @@ networks:
 configs:
   traefik_static:
     file: ../configs/traefik/config_static.yml
-  traefik_dynamic:
-    file: ../configs/traefik/config_dynamic.yml
 
 services:
   traefik:
@@ -22,9 +20,6 @@ services:
     configs:
       - source: traefik_static
         target: /traefik.yml
-        mode: 0644
-      - source: traefik_dynamic
-        target: /config/config.yml
         mode: 0644
     ports:
       - "80:80"
