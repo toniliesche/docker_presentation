@@ -74,6 +74,8 @@ ngxl: nginx-logs
 ngxcr: nginx-run-compose
 ngxcrd: nginx-run-compose-detached
 ngxcd: nginx-down
+ngxcrr: nginx-run-dynamic
+ngxdd: nginx-down-dynamic
 
 hwr: hw-run
 hwd: hw-down
@@ -111,7 +113,8 @@ wpds: wp-docker-sync
 wpdss: wp-down wp-docker-sync-stop
 
 trr: traefik-run
-trre: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
+trre: traefik-run-extended
+trrec: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
 trd: traefik-down
 trde: traefik-down wp-down hw-down
 
@@ -142,7 +145,6 @@ docker-logs:
 	@echo
 	@docker logs -f ${CT}
 	@echo
-	@echo
 
 docker-build: docker-build-php docker-build-php-dev docker-build-php-7.4 docker-build-mariadb
 
@@ -151,7 +153,6 @@ docker-build-mariadb:
 	@echo "\033[1;34mdocker build images/mariadb/ -t phpughh/mariadb:10.6\033[0m"
 	@echo
 	@docker build images/mariadb/ -t phpughh/mariadb:10.6
-	@echo
 	@echo
 
 docker-build-php:
@@ -235,7 +236,6 @@ hw-down:
 	@echo
 	@docker compose -f docker-compose/docker-compose-hello-world.yml -p helloworld down
 	@echo
-	@echo
 
 hw-run:
 	@echo
@@ -307,7 +307,6 @@ nginx-logs:
 	@echo
 	@docker logs -f nginx
 	@echo
-	@echo
 
 nginx-down:
 	@echo
@@ -315,6 +314,12 @@ nginx-down:
 	@echo
 	@docker compose -f docker-compose/docker-compose-nginx.yml -p nginx down
 	@echo
+
+nginx-down-dynamic:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-nginx-dynamic.yml -p nginx down\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-nginx-dynamic.yml -p nginx down
 	@echo
 
 nginx-inspect:
@@ -344,6 +349,12 @@ nginx-run-compose:
 	@echo
 	@docker compose -f docker-compose/docker-compose-nginx.yml -p nginx up --remove-orphans --always-recreate-deps
 	@echo
+
+nginx-run-dynamic:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-nginx-dynamic.yml -p nginx up --remove-orphans --always-recreate-deps\033[0m"
+	@echo
+	@docker compose -f docker-compose/docker-compose-nginx-dynamic.yml -p nginx up -d --remove-orphans --always-recreate-deps
 
 nginx-run-compose-detached:
 	@echo
