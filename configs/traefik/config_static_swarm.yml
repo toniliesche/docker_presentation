@@ -1,0 +1,31 @@
+api:
+  dashboard: true
+
+entryPoints:
+  http:
+    address: ":80"
+    forwardedHeaders:
+      insecure: true
+  mariadb:
+    address: ":3306"
+
+log:
+  level: "ERROR"
+
+providers:
+  file:
+    filename: /config/config.yml
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: "swarm_traefik"
+    defaultRule: "Host(`*`)"
+    swarmMode: true
+    swarmModeRefreshSeconds: 10
+
+experimental:
+  localPlugins:
+    x-requestid:
+      moduleName: git.toniliesche.de/tliesche/traefik-x-requestid
+    access-log:
+      moduleName: git.toniliesche.de/tliesche/traefik-access-log

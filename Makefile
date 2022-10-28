@@ -5,14 +5,6 @@ else
     LINUX_MODE := "native"
 endif
 
-ifeq ($(LINUX_MODE), "wsl")
-setup-xdebug: setup-xdebug-wsl
-else ifeq ($(LINUX_MODE), "vm")
-setup-xdebug: setup-xdebug-vm
-else
-setup-xdebug: setup-xdebug-native
-endif
-
 help:
 	@echo
 	@echo "Command List:"
@@ -32,6 +24,8 @@ help:
 	@echo "\033[1;34mdocker-network-inspect\033[0m - Show details of existing Docker network"
 	@echo "\033[1;34mdocker-ps\033[0m - Show running Docker containers"
 	@echo "\033[1;34mdocker-psa\033[0m - Show all Docker containers"
+	@echo "\033[1;34mdocker-swarm-init\033[0m - Initialize Docker swarm"
+	@echo "\033[1;34mdocker-swarm-network-create\033[0m - Create new DOcker swarm network"
 	@echo "\033[1;34mhw-run-simple\033[0m - Run simple hello world example"
 	@echo "\033[1;34mhw-down\033[0m - Stop and clean hello world example"
 	@echo "\033[1;34mmariadb\033[0m - Connect to mariadb database using cli tool"
@@ -62,6 +56,14 @@ help:
 	@echo "\033[1;34mwp-run-simple\033[0m - Run simple wordpress example"
 	@echo "\033[1;34mwp-run-traefik\033[0m - Run wordpress example with Traefik frontend"
 	@echo
+
+ifeq ($(LINUX_MODE), "wsl")
+setup-xdebug: setup-xdebug-wsl
+else ifeq ($(LINUX_MODE), "vm")
+setup-xdebug: setup-xdebug-vm
+else
+setup-xdebug: setup-xdebug-native
+endif
 
 ngxr: nginx-run
 ngxrp: nginx-run-published
@@ -99,6 +101,12 @@ dbp: docker-build-php
 dbpd: docker-build-php-dev
 dbp7: docker-build-php-7.4
 dbtr: docker-build-traefik
+
+dsi: docker-swarm-init
+dsnc: docker-swarm-network-create
+dsdtr: docker-swarm-deploy-traefik
+dsls: docker-swarm-list
+dsps: docker-swarm-ps
 
 wpr: wp-run-simple
 wprd: wp-run-dev
@@ -164,13 +172,13 @@ docker-build-php:
 
 docker-build-php-7.4:
 	@echo
-	@echo "\033[1;34mdocker build images/php-fpm/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4\033[0m"
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-build-php7.4.yml build php\033[0m"
 	@echo
-	@docker build images/php-fpm/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4
+	@docker compose -f docker-compose/docker-compose-build-php7.4.yml build php
 	@echo
-	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker build images/php-fpm-dev/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4-dev\033[0m"
+	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker compose -f docker-compose/docker-compose-build-php7.4.yml build php-dev\033[0m"
 	@echo
-	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev/ --build-arg php_version=7.4 -t phpughh/php-fpm:7.4-dev
+	@DOCKER_BUILDKIT=1 docker compose -f docker-compose/docker-compose-build-php7.4.yml build php-dev
 	@echo
 
 docker-build-php-dev:
@@ -220,14 +228,49 @@ docker-ps:
 	@echo
 	@echo "\033[1;34mdocker ps\033[0m"
 	@echo
-	@docker ps
+	@docker ps | grep -v nfon | grep -v toni | grep -v k8s
 	@echo
 
 docker-psa:
 	@echo
 	@echo "\033[1;34mdocker ps -a\033[0m"
 	@echo
-	@docker ps -a | grep -v nfon | grep -v toni
+	@docker ps -a | grep -v nfon | grep -v toni | grep -v k8s
+	@echo
+
+docker-swarm-init:
+	@echo
+	@echo "\033[1;34mdocker swarm init\033[0m"
+	@echo
+	@docker swarm init
+	@echo
+
+docker-swarm-network-create:
+	@echo
+	@echo "\033[1;34mdocker network create --opt encrypted --driver overlay --attachable swarm_traefik --subnet 10.7.0.0/22\033[0m"
+	@echo
+	@docker network create --opt encrypted --driver overlay --attachable swarm_traefik --subnet 10.7.0.0/22
+	@echo
+
+docker-swarm-deploy-traefik:
+	@echo
+	@echo "\033[1;34mdocker stack deploy -c docker-swarm/docker-compose-traefik.yml --orchestrator swarm traefik\033[0m"
+	@echo
+	@docker stack deploy -c docker-swarm/docker-compose-traefik.yml --orchestrator swarm traefik
+	@echo
+
+docker-swarm-list:
+	@echo
+	@echo "\033[1;34mdocker stack ls\033[0m"
+	@echo
+	@docker stack ls
+	@echo
+
+docker-swarm-ps:
+	@echo
+	@echo "\033[1;34mdocker stack ps ${ST}\033[0m"
+	@echo
+	@docker stack ps ${ST}
 	@echo
 
 hw-down:

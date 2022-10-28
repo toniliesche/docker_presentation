@@ -31,6 +31,7 @@ services:
       - "traefik.enable=true"
 
       - "traefik.http.services.api-svc.loadbalancer.server.port=9999"
+
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.rule=Host(`traefik.phpug.hh`)"
       - "traefik.http.routers.traefik.service=api@internal"

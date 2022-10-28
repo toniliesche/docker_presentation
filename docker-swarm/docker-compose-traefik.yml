@@ -1,0 +1,51 @@
+version: "3.5"
+
+networks:
+  traefik_swarm:
+    external: true
+
+configs:
+  traefik_static:
+    file: ../configs/traefik/config_static_swarm.yml
+  traefik_dynamic:
+    file: ../configs/traefik/config_dynamic_extended.yml
+
+services:
+  traefik:
+    hostname: traefik
+    image: phpughh/traefik:2.9
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      labels:
+        - "traefik.enable=true"
+
+        - "traefik.http.services.api-svc.loadbalancer.server.port=9999"
+
+        - "traefik.http.routers.traefik.entrypoints=http"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.phpug.hh`)"
+        - "traefik.http.routers.traefik.priority=2"
+        - "traefik.http.routers.traefik.service=api@internal"
+    configs:
+      - source: traefik_static
+        target: /traefik.yml
+        mode: 0644
+      - source: traefik_dynamic
+        target: /config/config.yml
+        mode: 0644
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "80:80"
+      - "3306:3306"
