@@ -1,0 +1,25 @@
+api:
+  dashboard: true
+
+entryPoints:
+  http:
+    address: ":80"
+    forwardedHeaders:
+      insecure: true
+  mariadb:
+    address: ":3306"
+
+log:
+  level: "ERROR"
+
+providers:
+  kubernetesIngress:
+  file:
+    filename: /config/config.yml
+
+experimental:
+  localPlugins:
+    x-requestid:
+      moduleName: git.toniliesche.de/tliesche/traefik-x-requestid
+    access-log:
+      moduleName: git.toniliesche.de/tliesche/traefik-access-log

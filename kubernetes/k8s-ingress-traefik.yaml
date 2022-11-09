@@ -1,0 +1,14 @@
+kind: Ingress
+apiVersion: extensions/v1
+metadata:
+  name: traefik-ingress
+  namespace: traefik
+spec:
+  rules:
+  - host: traefik.phpug.hh
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: traefik-ingress-service
+          servicePort: dashboard

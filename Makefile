@@ -11,41 +11,57 @@ help:
 	@echo "-------------"
 	@echo
 	@echo "\033[1;34mclean\033[0m - Clean wordpress data"
+	@echo "\033[1;34mclean-images\033[0m - Remove created images"
 	@echo "\033[1;34mcli CT=<container name>\033[0m - Open shell inside wordpress_php container"
 	@echo "\033[1;34mdocker-build\033[0m - Build all containers"
 	@echo "\033[1;34mdocker-build-mariadb\033[0m - Build MariaDB image"
 	@echo "\033[1;34mdocker-build-php\033[0m - Build wordpress Docker image with required php extensions"
-	@echo "\033[1;34mdocker-build-php-dev\033[0m - Build wordpress Docker image with xdebug"
 	@echo "\033[1;34mdocker-build-php-7.4\033[0m - Build wordpress Docker image with 7.4"
+	@echo "\033[1;34mdocker-build-php-dev\033[0m - Build wordpress Docker image with xdebug"
 	@echo "\033[1;34mdocker-build-traefik\033[0m - Build Traefik Docker image with middleware addition"
 	@echo "\033[1;34mdocker-images\033[0m - Show existing Docker images"
+	@echo "\033[1;34mdocker-logs CT=<container name>\033[0m - Attach to container's stdout"
 	@echo "\033[1;34mdocker-network-create\033[0m - Create new Docker network"
-	@echo "\033[1;34mdocker-network-ls\033[0m - List existing Docker networks"
 	@echo "\033[1;34mdocker-network-inspect\033[0m - Show details of existing Docker network"
+	@echo "\033[1;34mdocker-network-ls\033[0m - List existing Docker networks"
 	@echo "\033[1;34mdocker-ps\033[0m - Show running Docker containers"
 	@echo "\033[1;34mdocker-psa\033[0m - Show all Docker containers"
+	@echo "\033[1;34mdocker-swarm-deploy-traefik\033[0m - Deploy Traefik composition to Docker swarm"
 	@echo "\033[1;34mdocker-swarm-init\033[0m - Initialize Docker swarm"
-	@echo "\033[1;34mdocker-swarm-network-create\033[0m - Create new DOcker swarm network"
-	@echo "\033[1;34mhw-run-simple\033[0m - Run simple hello world example"
+	@echo "\033[1;34mdocker-swarm-list\033[0m - Show Docker swarm stacks"
+	@echo "\033[1;34mdocker-swarm-network-create\033[0m - Create new Docker swarm network"
+	@echo "\033[1;34mdocker-swarm-ps ST=<stack name>\033[0m - Show details of Docker swarm stack"
 	@echo "\033[1;34mhw-down\033[0m - Stop and clean hello world example"
+	@echo "\033[1;34mhw-run\033[0m - Run simple hello world example"
+	@echo "\033[1;34mhw-run-traefik\033[0m - Run simple hello world example behind Traefik"
+	@echo "\033[1;34mhw-run-traefik-extended\033[0m - Run simple hello world example behind Traefik with logging extensions"
+	@echo "\033[1;34mk8s-traefik-clusterrole\033[0m - Create K8s cluster role for Traefik"
+	@echo "\033[1;34mk8s-traefik-deployment\033[0m - Create K8s deployment for Traefik"
+	@echo "\033[1;34mk8s-traefik-ingress\033[0m - Create K8s ingress route for Traefik"
+	@echo "\033[1;34mk8s-traefik-namespace\033[0m - Create K8s namespace for Traefik"
+	@echo "\033[1;34mk8s-traefik-rolebinding\033[0m - Create K8s role binding for Traefik service account"
+	@echo "\033[1;34mk8s-traefik-service\033[0m - Create K8s service definition"
+	@echo "\033[1;34mk8s-traefik-serviceaccount\033[0m - Create K8s service account"
 	@echo "\033[1;34mmariadb\033[0m - Connect to mariadb database using cli tool"
 	@echo "\033[1;34mmariadb-run\033[0m - Run simple Docker MariaDB container"
 	@echo "\033[1;34mmariadb-run-persistent\033[0m - Run simple Docker MariaDB container with data persistance volume in detached mode"
 	@echo "\033[1;34mmariadb-stop\033[0m - Stop running Docker MariaDB container"
 	@echo "\033[1;34mmariadb-volume-create\033[0m - Create volume for MariaDB"
 	@echo "\033[1;34mmariadb-volume-show\033[0m - Show volume content for MariaDB inside file system"
+	@echo "\033[1;34mnginx-down\033[0m - Stop and clean running Docker Nginx container in docker compose mode"
 	@echo "\033[1;34mnginx-inspect\033[0m - Inspect running Docker Nginx container"
 	@echo "\033[1;34mnginx-inspect-network\033[0m - Inspect running Docker Nginx container with format directive"
+	@echo "\033[1;34mnginx-logs\033[0m - Show logs of Docker Nginx container"
 	@echo "\033[1;34mnginx-run\033[0m - Run simple Docker Nginx container"
-	@echo "\033[1;34mnginx-run-published\033[0m - Run simple Docker Nginx container with published port 80"
-	@echo "\033[1;34mnginx-run-detached\033[0m - Run simple Docker Nginx container in detached mode"
 	@echo "\033[1;34mnginx-run-compose\033[0m - Run simple Docker Nginx container in docker compose mode"
 	@echo "\033[1;34mnginx-run-compose-detached\033[0m - Run simple Docker Nginx container in detached docker compose mode"
+	@echo "\033[1;34mnginx-run-detached\033[0m - Run simple Docker Nginx container in detached mode"
+	@echo "\033[1;34mnginx-run-dynamic\033[0m - Run simple Docker Nginx container with dynamic subdomain rewrite"
+	@echo "\033[1;34mnginx-run-published\033[0m - Run simple Docker Nginx container with published port 80"
 	@echo "\033[1;34mnginx-stop\033[0m - Stop running Docker Nginx container"
-	@echo "\033[1;34mnginx-down\033[0m - Stop and clean running Docker Nginx container in docker compose mode"
-	@echo "\033[1;34mnginx-lgs\033[0m - Show logs of Docker Nginx container"
-	@echo "\033[1;34mtraefik-down\033[0m - Stop and clean traefik load balancer"
+	@echo "\033[1;34msetup-xdebug\033[0m - Set Xdebug .env variables for remote debugging"
 	@echo "\033[1;34mtraefik-run\033[0m - Run traefik load balancer"
+	@echo "\033[1;34mtraefik-run-extended\033[0m - Run traefik load balancer with logging extensions"
 	@echo "\033[1;34mvolumes\033[0m - Show existing volumes"
 	@echo "\033[1;34mwp-create-db\033[0m - Create database and user for wordpress"
 	@echo "\033[1;34mwp-down\033[0m - Stop and clean wordpress example"
@@ -55,76 +71,9 @@ help:
 	@echo "\033[1;34mwp-run-dev\033[0m - Run wordpress example with xdebug"
 	@echo "\033[1;34mwp-run-simple\033[0m - Run simple wordpress example"
 	@echo "\033[1;34mwp-run-traefik\033[0m - Run wordpress example with Traefik frontend"
+	@echo "\033[1;34mwp-run-traefik-extended\033[0m - Run wordpress example with Traefik frontend with logging extension"
+	@echo "\033[1;34mwp-run-windows\033[0m - Run wordpress example with Windows mounted codebase"
 	@echo
-
-ifeq ($(LINUX_MODE), "wsl")
-setup-xdebug: setup-xdebug-wsl
-else ifeq ($(LINUX_MODE), "vm")
-setup-xdebug: setup-xdebug-vm
-else
-setup-xdebug: setup-xdebug-native
-endif
-
-ngxr: nginx-run
-ngxrp: nginx-run-published
-ngxrd: nginx-run-detached
-ngxs: nginx-stop
-ngxi: nginx-inspect
-ngxin: nginx-inspect-network
-ngxl: nginx-logs
-
-ngxcr: nginx-run-compose
-ngxcrd: nginx-run-compose-detached
-ngxcd: nginx-down
-ngxcrr: nginx-run-dynamic
-ngxdd: nginx-down-dynamic
-
-hwr: hw-run
-hwd: hw-down
-
-mdbr: mariadb-run
-mdbv: mariadb-volume-create
-mdbrp: mariadb-run-persistent
-mdbs: mariadb-stop
-mdb: mariadb
-
-di: docker-images
-dbmdb: docker-build-mariadb
-dps: docker-ps
-dpsa: docker-psa
-dnc: docker-network-create
-dnl: docker-network-ls
-dni: docker-network-inspect
-dl: docker-logs
-
-dbp: docker-build-php
-dbpd: docker-build-php-dev
-dbp7: docker-build-php-7.4
-dbtr: docker-build-traefik
-
-dsi: docker-swarm-init
-dsnc: docker-swarm-network-create
-dsdtr: docker-swarm-deploy-traefik
-dsls: docker-swarm-list
-dsps: docker-swarm-ps
-
-wpr: wp-run-simple
-wprd: wp-run-dev
-wpr7: wp-run-7.4
-wprt: wp-run-traefik hw-run-traefik
-wprw: wp-run-windows
-wprds: wp-run-docker-sync
-wpdbs: wp-create-db
-wpd: wp-down
-wpdt: wp-down-traefik
-wpds: wp-docker-sync
-wpdss: wp-down wp-docker-sync-stop
-
-trr: traefik-run
-trre: traefik-run-extended
-trrec: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
-trd: traefik-down
-trde: traefik-down wp-down hw-down
 
 clean:
 	@echo
@@ -301,6 +250,55 @@ hw-run-traefik-extended:
 	@docker compose -f docker-compose/docker-compose-hello-world-traefik-extended.yml -p helloworld up -d --remove-orphans --always-recreate-deps
 	@echo
 
+k8s-traefik-clusterrole:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-clusterrole-traefik.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-clusterrole-traefik.yaml
+	@echo
+
+k8s-traefik-deployment:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-traefik.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-deployment-traefik.yaml
+	@echo
+
+k8s-traefik-ingress:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-traefik.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-ingress-traefik.yaml
+	@echo
+
+k8s-traefik-namespace:
+	@echo
+	@echo "\033[1;34mkubectl create namespace traefik\033[0m"
+	@echo
+	@kubectl create namespace traefik
+	@echo
+
+k8s-traefik-rolebinding:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-rolebinding-traefik.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-rolebinding-traefik.yaml
+	@echo
+
+k8s-traefik-service:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-traefik.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-service-traefik.yaml
+	@echo
+
+k8s-traefik-serviceaccount:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-serviceaccount-traefik.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-serviceaccount-traefik.yaml
+	@echo
+
 mariadb:
 	@echo
 	@echo "\033[1;34mmysql -h 127.0.0.1 -uroot -pphpughh\033[0m"
@@ -427,11 +425,6 @@ nginx-stop:
 	@docker stop nginx
 	@echo
 
-traefik-down:
-	@echo
-	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik down\033[0m"
-	@docker compose -f docker-compose/docker-compose-traefik.yml -p traefik down
-
 setup-xdebug-native:
 	@echo
 	@echo "echo XDEBUG_HOST=\$$(ifconfig docker0 | grep \"inet \" | awk '{print \$$2}') > .env"
@@ -452,6 +445,11 @@ setup-xdebug-wsl:
 	@echo XDEBUG_HOST=$$(ifconfig eth0 | grep "inet " | awk '{print $$2}') > .env
 	@echo "echo XDEBUG_PORT=9000 >> .env"
 	@echo XDEBUG_PORT=9000 >> .env
+
+traefik-down:
+	@echo
+	@echo "\033[1;34mdocker compose -f docker-compose/docker-compose-traefik.yml -p traefik down\033[0m"
+	@docker compose -f docker-compose/docker-compose-traefik.yml -p traefik down
 
 traefik-run:
 	@echo
@@ -554,4 +552,83 @@ wp-down-traefik:
 	@docker compose -f docker-compose/docker-compose-wp-traefik.yml --env-file .env -p wordpress down
 	@echo
 
-wp-run: docker-build mariadb-volume traefik-run wp-run-traefik wp-create-db
+# Alias commands from here
+
+wp-run: docker-build mariadb-volume-create traefik-run wp-run-traefik wp-create-db
+
+ifeq ($(LINUX_MODE), "wsl")
+setup-xdebug: setup-xdebug-wsl
+else ifeq ($(LINUX_MODE), "vm")
+setup-xdebug: setup-xdebug-vm
+else
+setup-xdebug: setup-xdebug-native
+endif
+
+ngxr: nginx-run
+ngxrp: nginx-run-published
+ngxrd: nginx-run-detached
+ngxs: nginx-stop
+ngxi: nginx-inspect
+ngxin: nginx-inspect-network
+ngxl: nginx-logs
+
+ngxcr: nginx-run-compose
+ngxcrd: nginx-run-compose-detached
+ngxcd: nginx-down
+ngxcrr: nginx-run-dynamic
+ngxdd: nginx-down-dynamic
+
+hwr: hw-run
+hwd: hw-down
+
+mdbr: mariadb-run
+mdbv: mariadb-volume-create
+mdbrp: mariadb-run-persistent
+mdbs: mariadb-stop
+mdb: mariadb
+
+di: docker-images
+dbmdb: docker-build-mariadb
+dps: docker-ps
+dpsa: docker-psa
+dnc: docker-network-create
+dnl: docker-network-ls
+dni: docker-network-inspect
+dl: docker-logs
+
+dbp: docker-build-php
+dbpd: docker-build-php-dev
+dbp7: docker-build-php-7.4
+dbtr: docker-build-traefik
+
+dsi: docker-swarm-init
+dsnc: docker-swarm-network-create
+dsdtr: docker-swarm-deploy-traefik
+dsls: docker-swarm-list
+dsps: docker-swarm-ps
+
+wpr: wp-run-simple
+wprd: wp-run-dev
+wpr7: wp-run-7.4
+wprt: wp-run-traefik hw-run-traefik
+wprw: wp-run-windows
+wprds: wp-run-docker-sync
+wpdbs: wp-create-db
+wpd: wp-down
+wpdt: wp-down-traefik
+wpds: wp-docker-sync
+wpdss: wp-down wp-docker-sync-stop
+
+trr: traefik-run
+trre: traefik-run-extended
+trrec: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
+trd: traefik-down
+trde: traefik-down wp-down hw-down
+
+k8trcr: k8s-traefik-clusterrole
+k8trdp: k8s-traefik-deployment
+k8trig: k8s-traefik-ingress
+k8trns: k8s-traefik-namespace
+k8trrb: k8s-traefik-rolebinding
+k8trsa: k8s-traefik-serviceaccount
+k8trsv: k8s-traefik-service
