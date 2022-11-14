@@ -41,10 +41,12 @@ help:
 	@echo "\033[1;34mk8s-traefik-clusterrole\033[0m - Create K8s cluster role for Traefik"
 	@echo "\033[1;34mk8s-traefik-deployment\033[0m - Create K8s deployment for Traefik"
 	@echo "\033[1;34mk8s-traefik-ingress\033[0m - Create K8s ingress route for Traefik"
-	@echo "\033[1;34mk8s-traefik-namespace\033[0m - Create K8s namespace for Traefik"
 	@echo "\033[1;34mk8s-traefik-rolebinding\033[0m - Create K8s role binding for Traefik service account"
-	@echo "\033[1;34mk8s-traefik-service\033[0m - Create K8s service definition"
-	@echo "\033[1;34mk8s-traefik-serviceaccount\033[0m - Create K8s service account"
+	@echo "\033[1;34mk8s-traefik-service\033[0m - Create K8s service definition for Traefik"
+	@echo "\033[1;34mk8s-traefik-serviceaccount\033[0m - Create K8s service account for Traefik"
+	@echo "\033[1;34mk8s-whoami-deployment\033[0m - Create K8s deployment for whoami"
+	@echo "\033[1;34mk8s-whoami-ingress\033[0m - Create K8s ingress route for whoami"
+	@echo "\033[1;34mk8s-whoami-service\033[0m - Create K8s service definition for whoami"
 	@echo "\033[1;34mmariadb\033[0m - Connect to mariadb database using cli tool"
 	@echo "\033[1;34mmariadb-run\033[0m - Run simple Docker MariaDB container"
 	@echo "\033[1;34mmariadb-run-persistent\033[0m - Run simple Docker MariaDB container with data persistance volume in detached mode"
@@ -299,13 +301,6 @@ k8s-traefik-ingress:
 	@kubectl apply -f kubernetes/k8s-ingress-traefik.yaml
 	@echo
 
-k8s-traefik-namespace:
-	@echo
-	@echo "\033[1;34mkubectl create namespace traefik\033[0m"
-	@echo
-	@kubectl create namespace traefik
-	@echo
-
 k8s-traefik-rolebinding:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-rolebinding-traefik.yaml\033[0m"
@@ -315,9 +310,13 @@ k8s-traefik-rolebinding:
 
 k8s-traefik-service:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-traefik.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-traefik-dashboard.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-service-traefik.yaml
+	@kubectl apply -f kubernetes/k8s-service-traefik-dashboard.yaml
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-traefik-loadbalancer.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-service-traefik-loadbalancer.yaml
 	@echo
 
 k8s-traefik-serviceaccount:
@@ -325,6 +324,27 @@ k8s-traefik-serviceaccount:
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-serviceaccount-traefik.yaml\033[0m"
 	@echo
 	@kubectl apply -f kubernetes/k8s-serviceaccount-traefik.yaml
+	@echo
+
+k8s-whoami-deployment:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-whoami.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-deployment-whoami.yaml
+	@echo
+
+k8s-whoami-ingress:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-whoami.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-ingress-whoami.yaml
+	@echo
+
+k8s-whoami-service:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-whoami.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-service-whoami.yaml
 	@echo
 
 mariadb:
@@ -659,7 +679,12 @@ trde: traefik-down wp-down hw-down
 k8trcr: k8s-traefik-clusterrole
 k8trdp: k8s-traefik-deployment
 k8trig: k8s-traefik-ingress
-k8trns: k8s-traefik-namespace
 k8trrb: k8s-traefik-rolebinding
 k8trsa: k8s-traefik-serviceaccount
 k8trsv: k8s-traefik-service
+
+k8trsu: k8trsa k8trcr k8trrb k8trdp
+
+k8widp: k8s-whoami-deployment
+k8wiig: k8s-whoami-ingress
+k8wisv: k8s-whoami-service

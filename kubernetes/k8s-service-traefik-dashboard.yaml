@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-dashboard-service
+spec:
+  type: NodePort
+  ports:
+    - name: dashboard
+      targetPort: dashboard
+      port: 8080
+  selector:
+    app: traefik
