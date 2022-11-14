@@ -19,6 +19,7 @@ help:
 	@echo "\033[1;34mdocker-build-php-7.4\033[0m - Build wordpress Docker image with 7.4"
 	@echo "\033[1;34mdocker-build-php-dev\033[0m - Build wordpress Docker image with xdebug"
 	@echo "\033[1;34mdocker-build-traefik\033[0m - Build Traefik Docker image with middleware addition"
+	@echo "\033[1;34mdocker-build-wordpress\033[0m - Build Wordpress Docker images"
 	@echo "\033[1;34mdocker-images\033[0m - Show existing Docker images"
 	@echo "\033[1;34mdocker-logs CT=<container name>\033[0m - Attach to container's stdout"
 	@echo "\033[1;34mdocker-network-create\033[0m - Create new Docker network"
@@ -26,7 +27,9 @@ help:
 	@echo "\033[1;34mdocker-network-ls\033[0m - List existing Docker networks"
 	@echo "\033[1;34mdocker-ps\033[0m - Show running Docker containers"
 	@echo "\033[1;34mdocker-psa\033[0m - Show all Docker containers"
+	@echo "\033[1;34mdocker-swarm-deploy-mariadb\033[0m - Deploy MariaDB composition to Docker swarm"
 	@echo "\033[1;34mdocker-swarm-deploy-traefik\033[0m - Deploy Traefik composition to Docker swarm"
+	@echo "\033[1;34mdocker-swarm-deploy-wordpress\033[0m - Deploy Wordpress composition to Docker swarm"
 	@echo "\033[1;34mdocker-swarm-init\033[0m - Initialize Docker swarm"
 	@echo "\033[1;34mdocker-swarm-list\033[0m - Show Docker swarm stacks"
 	@echo "\033[1;34mdocker-swarm-network-create\033[0m - Create new Docker swarm network"
@@ -144,6 +147,17 @@ docker-build-traefik:
 	@docker build images/traefik/ -t phpughh/traefik:2.9
 	@echo
 
+docker-build-wordpress:
+	@echo
+	@echo "\033[1;34mdocker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3\033[0m"
+	@echo
+	@docker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3
+	@echo
+	@echo "\033[1;34mdocker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3\033[0m"
+	@echo
+	@docker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3
+	@echo
+
 docker-images:
 	@echo
 	@echo "\033[1;34mdocker images\033[0m"
@@ -201,11 +215,25 @@ docker-swarm-network-create:
 	@docker network create --opt encrypted --driver overlay --attachable swarm_traefik --subnet 10.7.0.0/22
 	@echo
 
+docker-swarm-deploy-mariadb:
+	@echo
+	@echo "\033[1;34mdocker stack deploy -c docker-swarm/docker-compose-mariadb.yml --orchestrator swarm mariadb\033[0m"
+	@echo
+	@docker stack deploy -c docker-swarm/docker-compose-mariadb.yml --orchestrator swarm mariadb
+	@echo
+
 docker-swarm-deploy-traefik:
 	@echo
 	@echo "\033[1;34mdocker stack deploy -c docker-swarm/docker-compose-traefik.yml --orchestrator swarm traefik\033[0m"
 	@echo
 	@docker stack deploy -c docker-swarm/docker-compose-traefik.yml --orchestrator swarm traefik
+	@echo
+
+docker-swarm-deploy-wordpress:
+	@echo
+	@echo "\033[1;34mdocker stack deploy -c docker-swarm/docker-compose-wordpress.yml --orchestrator swarm wordpress\033[0m"
+	@echo
+	@docker stack deploy -c docker-swarm/docker-compose-wordpress.yml --orchestrator swarm wordpress
 	@echo
 
 docker-swarm-list:
@@ -595,6 +623,7 @@ dnc: docker-network-create
 dnl: docker-network-ls
 dni: docker-network-inspect
 dl: docker-logs
+dbwp: docker-build-wordpress
 
 dbp: docker-build-php
 dbpd: docker-build-php-dev
@@ -604,6 +633,8 @@ dbtr: docker-build-traefik
 dsi: docker-swarm-init
 dsnc: docker-swarm-network-create
 dsdtr: docker-swarm-deploy-traefik
+dsdmdb: docker-swarm-deploy-mariadb
+dsdwp: docker-swarm-deploy-wordpress
 dsls: docker-swarm-list
 dsps: docker-swarm-ps
 

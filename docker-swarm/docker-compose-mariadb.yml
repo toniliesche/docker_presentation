@@ -1,0 +1,43 @@
+version: "3.5"
+
+networks:
+  default:
+  traefik:
+    external: true
+    name: swarm_traefik
+
+services:
+  mariadb:
+    hostname: mariadb
+    image: phpughh/mariadb:10.6
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      labels:
+        - "traefik.enable=true"
+
+        - "traefik.tcp.services.mariadb-svc.loadbalancer.server.port=3306"
+        - "traefik.tcp.routers.mariadb.service=mariadb-svc"
+        - "traefik.tcp.routers.mariadb.entrypoints=mariadb"
+        - "traefik.tcp.routers.mariadb.rule=HostSNI(`*`)"
+    volumes:
+      - ~/phpughh/docker/swarm_data/mariadb:/var/lib/mysql
+    networks:
+      - default
+      - traefik
+    environment:
+      - MYSQL_ROOT_PASSWORD=phpughh
+    healthcheck:
+      test: netstat -ltn | grep -q -c ":3306" || exit 1
+      interval: 10s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
