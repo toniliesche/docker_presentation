@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-mariadb-ingress-service
+spec:
+  type: LoadBalancer
+  ports:
+    - name: rdbms
+      targetPort: rdbms
+      port: 3306
+  selector:
+    app: traefik

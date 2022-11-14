@@ -361,6 +361,41 @@ k8s-whoami-service:
 	@kubectl apply -f kubernetes/k8s-service-whoami.yaml
 	@echo
 
+k8s-mariadb-secret:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-secret-mariadb.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-secret-mariadb.yaml
+	@echo
+
+k8s-mariadb-volume:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-pvclaim-mariadb.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-pvclaim-mariadb.yaml
+	@echo
+
+k8s-mariadb-deployment:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-mariadb.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-deployment-mariadb.yaml
+	@echo
+
+k8s-mariadb-ingress:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-mariadb.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-ingress-mariadb.yaml
+	@echo
+
+k8s-mariadb-service:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-mariadb.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-service-mariadb.yaml
+	@echo
+
 mariadb:
 	@echo
 	@echo "\033[1;34mmysql -h 127.0.0.1 -uroot -pphpughh\033[0m"
@@ -643,14 +678,14 @@ ngxdd: nginx-down-dynamic
 hwr: hw-run
 hwd: hw-down
 
-mdbr: mariadb-run
-mdbv: mariadb-volume-create
-mdbrp: mariadb-run-persistent
-mdbs: mariadb-stop
-mdb: mariadb
+mdr: mariadb-run
+mdv: mariadb-volume-create
+mdrp: mariadb-run-persistent
+mds: mariadb-stop
+md: mariadb
 
 di: docker-images
-dbmdb: docker-build-mariadb
+dbmd: docker-build-mariadb
 dps: docker-ps
 dpsa: docker-psa
 dnc: docker-network-create
@@ -667,7 +702,7 @@ dbtr: docker-build-traefik
 dsi: docker-swarm-init
 dsnc: docker-swarm-network-create
 dsdtr: docker-swarm-deploy-traefik
-dsdmdb: docker-swarm-deploy-mariadb
+dsdmd: docker-swarm-deploy-mariadb
 dsdwp: docker-swarm-deploy-wordpress
 dsls: docker-swarm-list
 dsps: docker-swarm-ps
@@ -704,3 +739,9 @@ k8trsu: k8trsa k8trcr k8trrb k8trdp
 k8widp: k8s-whoami-deployment
 k8wiig: k8s-whoami-ingress
 k8wisv: k8s-whoami-service
+
+k8mdsc: k8s-mariadb-secret
+k8mdvl: k8s-mariadb-volume
+k8mddp: k8s-mariadb-deployment
+k8mdsv: k8s-mariadb-service
+k8mdig: k8s-mariadb-ingress
