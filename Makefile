@@ -396,6 +396,27 @@ k8s-mariadb-service:
 	@kubectl apply -f kubernetes/k8s-service-mariadb.yaml
 	@echo
 
+k8s-dashboard:
+	@echo
+	@echo "\033[1;34mminikube dashboard\033[0m"
+	@echo
+	@minikube dashboard
+	@echo
+
+k8s-environment-vars:
+	@echo
+	@echo "\033[1;34meval \$$(minikube docker-env)\033[0m"
+	@echo
+	@eval $(minikube docker-env)
+	@echo
+
+k8s-port-forward:
+	@echo
+	@echo "\033[1;34msudo -E kubectl port-forward svc/traefik-ingress-service 80:80\033[0m"
+	@echo
+	@sudo -E kubectl port-forward svc/traefik-ingress-service 80:80
+	@echo
+
 mariadb:
 	@echo
 	@echo "\033[1;34mmysql -h 127.0.0.1 -uroot -pphpughh\033[0m"
@@ -724,6 +745,10 @@ trre: traefik-run-extended
 trrec: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
 trd: traefik-down
 trde: traefik-down wp-down hw-down
+
+k8db: k8s-dashboard
+k8env: k8s-environment-vars
+k8pf: k8s-port-forward
 
 k8trcd: k8s-traefik-configmap-describe
 k8trcm: k8s-traefik-configmap
