@@ -1,5 +1,6 @@
 api:
   dashboard: true
+  insecure: true
 
 entryPoints:
   http:
@@ -10,12 +11,12 @@ entryPoints:
     address: ":3306"
 
 log:
-  level: "ERROR"
+  level: "DEBUG"
 
 providers:
-  kubernetesIngress:
+  kubernetesIngress: {}
   file:
-    filename: /config/config.yml
+    filename: /traefik-config/dynamic.yml
 
 experimental:
   localPlugins:

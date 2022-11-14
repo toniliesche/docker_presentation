@@ -280,6 +280,20 @@ hw-run-traefik-extended:
 	@docker compose -f docker-compose/docker-compose-hello-world-traefik-extended.yml -p helloworld up -d --remove-orphans --always-recreate-deps
 	@echo
 
+k8s-traefik-configmap:
+	@echo
+	@echo "\033[1;34mkubectl create configmap traefik-config --from-file=configs/traefik/config_static_k8s.yml\033[0m"
+	@echo
+	@kubectl create configmap traefik-config --from-file=configs/traefik/config_static_k8s.yml --from-file=configs/traefik/config_dynamic_extended.yml
+	@echo
+
+k8s-traefik-configmap-describe:
+	@echo
+	@echo "\033[1;34mkubectl describe configmap traefik-config\033[0m"
+	@echo
+	@kubectl describe configmap traefik-config
+	@echo
+
 k8s-traefik-clusterrole:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-clusterrole-traefik.yaml\033[0m"
@@ -676,6 +690,8 @@ trrec: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
 trd: traefik-down
 trde: traefik-down wp-down hw-down
 
+k8trcd: k8s-traefik-configmap-describe
+k8trcm: k8s-traefik-configmap
 k8trcr: k8s-traefik-clusterrole
 k8trdp: k8s-traefik-deployment
 k8trig: k8s-traefik-ingress

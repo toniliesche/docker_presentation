@@ -24,7 +24,17 @@ spec:
               containerPort: 80
             - name: dashboard
               containerPort: 8080
+          volumeMounts:
+            - name: config-volume
+              mountPath: /traefik-config
           args:
-            - --api.insecure
-            - --providers.kubernetesingress
-            - --log.level=DEBUG
+            - --configfile=/traefik-config/static.yml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: traefik-config
+            items:
+              - key: config_static_k8s.yml
+                path: static.yml
+              - key: config_dynamic_extended.yml
+                path: dynamic.yml
