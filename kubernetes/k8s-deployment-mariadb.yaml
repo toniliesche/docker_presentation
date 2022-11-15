@@ -20,6 +20,7 @@ spec:
           ports:
             - name: rdbms
               containerPort: 3306
+              protocol: TCP
           env:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
@@ -32,4 +33,4 @@ spec:
       volumes:
         - name: mariadb-pv
           persistentVolumeClaim:
-            claimName: mariadb-pv-claim
+            claimName: mariadb-volume

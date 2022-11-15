@@ -153,11 +153,11 @@ docker-build-wordpress:
 	@echo
 	@echo "\033[1;34mdocker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3\033[0m"
 	@echo
-	@docker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3
+	@DOCKER_BUILDKIT=1 docker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3
 	@echo
 	@echo "\033[1;34mdocker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3\033[0m"
 	@echo
-	@docker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3
+	@DOCKER_BUILDKIT=1 docker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3
 	@echo
 
 docker-images:
@@ -282,7 +282,7 @@ hw-run-traefik-extended:
 
 k8s-traefik-configmap:
 	@echo
-	@echo "\033[1;34mkubectl create configmap traefik-config --from-file=configs/traefik/config_static_k8s.yml\033[0m"
+	@echo "\033[1;34mkubectl create configmap traefik-config --from-file=configs/traefik/config_static_k8s.yml --from-file=configs/traefik/config_dynamic_extended.yml\033[0m"
 	@echo
 	@kubectl create configmap traefik-config --from-file=configs/traefik/config_static_k8s.yml --from-file=configs/traefik/config_dynamic_extended.yml
 	@echo
@@ -361,6 +361,34 @@ k8s-whoami-service:
 	@kubectl apply -f kubernetes/k8s-service-whoami.yaml
 	@echo
 
+k8s-wordpress-configmap:
+	@echo
+	@echo "\033[1;34mkubectl create configmap wordpress-config --from-file=configs/wordpress/config_static_k8s.yml --from-file=configs/wordpress/wp-config-k8s.php\033[0m"
+	@echo
+	@kubectl create configmap wordpress-config --from-file=configs/nginx/wordpress-k8s.conf --from-file=configs/wordpress/wp-config-k8s.php
+	@echo
+
+k8s-wordpress-deployment:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-wordpress.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-deployment-wordpress.yaml
+	@echo
+
+k8s-wordpress-ingress:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-wordpress.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-ingress-wordpress.yaml
+	@echo
+
+k8s-wordpress-service:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-wordpress.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/k8s-service-wordpress.yaml
+	@echo
+
 k8s-mariadb-secret:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-secret-mariadb.yaml\033[0m"
@@ -396,25 +424,32 @@ k8s-mariadb-service:
 	@kubectl apply -f kubernetes/k8s-service-mariadb.yaml
 	@echo
 
-k8s-dashboard:
+k8s-minikube-dashboard:
 	@echo
 	@echo "\033[1;34mminikube dashboard\033[0m"
 	@echo
 	@minikube dashboard
 	@echo
 
-k8s-environment-vars:
+k8s-minikube-environment-vars:
 	@echo
 	@echo "\033[1;34meval \$$(minikube docker-env)\033[0m"
 	@echo
-	@eval $(minikube docker-env)
+	@eval $$(minikube docker-env)
 	@echo
 
-k8s-port-forward:
+k8s-minikube-start:
 	@echo
-	@echo "\033[1;34msudo -E kubectl port-forward svc/traefik-ingress-service 80:80\033[0m"
+	@echo "\033[1;34mminikube start\033[0m"
 	@echo
-	@sudo -E kubectl port-forward svc/traefik-ingress-service 80:80
+	@minikube start
+	@echo
+
+k8s-minikube-tunnel:
+	@echo
+	@echo "\033[1;34mminikube tunnel\033[0m"
+	@echo
+	@minikube tunnel
 	@echo
 
 mariadb:
@@ -715,6 +750,7 @@ dni: docker-network-inspect
 dl: docker-logs
 dbwp: docker-build-wordpress
 
+dba: dbp dbpd dbp7 dbtr dbmd dbwp
 dbp: docker-build-php
 dbpd: docker-build-php-dev
 dbp7: docker-build-php-7.4
@@ -746,9 +782,10 @@ trrec: traefik-run-extended wp-run-traefik-extended hw-run-traefik-extended
 trd: traefik-down
 trde: traefik-down wp-down hw-down
 
-k8db: k8s-dashboard
-k8env: k8s-environment-vars
-k8pf: k8s-port-forward
+k8mkd: k8s-minikube-dashboard
+k8mke: k8s-minikube-environment-vars
+k8mks: k8s-minikube-start
+k8mkt: k8s-minikube-tunnel
 
 k8trcd: k8s-traefik-configmap-describe
 k8trcm: k8s-traefik-configmap
@@ -770,3 +807,8 @@ k8mdvl: k8s-mariadb-volume
 k8mddp: k8s-mariadb-deployment
 k8mdsv: k8s-mariadb-service
 k8mdig: k8s-mariadb-ingress
+
+k8wpdp: k8s-wordpress-deployment
+k8wpig: k8s-wordpress-ingress
+k8wpsv: k8s-wordpress-service
+k8wpcm: k8s-wordpress-configmap

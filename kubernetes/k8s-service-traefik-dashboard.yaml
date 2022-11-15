@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: traefik-dashboard-service
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - name: dashboard
       targetPort: dashboard

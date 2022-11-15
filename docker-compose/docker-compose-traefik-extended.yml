@@ -19,6 +19,7 @@ services:
       default:
         aliases:
           - mariadb.phpughh
+          - mariadb.phpughh.internal
     configs:
       - source: traefik_static
         target: /traefik.yml

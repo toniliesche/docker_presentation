@@ -3,10 +3,11 @@ apiVersion: v1
 metadata:
   name: mariadb-ingress-service
 spec:
+  type: LoadBalancer
+  ports:
+    - name: rdbms
+      targetPort: rdbms
+      protocol: TCP
+      port: 3306
   selector:
     app: mariadb
-  ports:
-    - protocol: TCP
-      port: 3306
-      name: rdbms
-  type: NodePort

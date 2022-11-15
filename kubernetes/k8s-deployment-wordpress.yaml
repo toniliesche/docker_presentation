@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wordpress-deployment
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+        - name: php
+          image: phpughh/wordpress-php:6.0.3
+          volumeMounts:
+            - name: config-volume
+              mountPath: /var/www/html/wordpress/wp-config.php
+              subPath: wp-config.php
+        - name: nginx
+          image: phpughh/wordpress-nginx:6.0.3
+          ports:
+            - name: web
+              containerPort: 80
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+      volumes:
+        - name: config-volume
+          configMap:
+            name: wordpress-config
+            items:
+              - key: wp-config-k8s.php
+                path: wp-config.php
+              - key: wordpress-k8s.conf
+                path: default.conf
