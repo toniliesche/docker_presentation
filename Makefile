@@ -564,7 +564,7 @@ k8s-minikube-start:
 	@echo
 	@echo "\033[1;34mminikube start\033[0m"
 	@echo
-	@minikube start
+	@minikube start --vm-driver=none
 	@echo
 
 k8s-minikube-tunnel:
