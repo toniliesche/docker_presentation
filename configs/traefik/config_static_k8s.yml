@@ -9,7 +9,7 @@ entryPoints:
       insecure: true
 
 log:
-  level: "DEBUG"
+  level: "ERROR"
 
 providers:
   kubernetesIngress: {}

@@ -11,12 +11,10 @@ entryPoints:
     address: ":3306"
 
 log:
-  level: "DEBUG"
+  level: "ERROR"
 
 providers:
-  kubernetesIngress: {}
-  kubernetesCRD:
-    endpoint: "http://localhost:8080"
+  kubernetesCRD: {}
   file:
     filename: /traefik-config/dynamic.yml
 

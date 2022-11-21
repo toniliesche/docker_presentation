@@ -117,6 +117,33 @@ docker-build-mariadb:
 	@docker build images/mariadb/ -t phpughh/mariadb:10.6
 	@echo
 
+docker-pull-all:
+	@echo
+	@echo "\033[1;34mdocker pull nginx:1.23-alpine\033[0m"
+	@echo
+	@docker pull nginx:1.23-alpine
+	@echo
+	@echo "\033[1;34mdocker pull traefik/whoami\033[0m"
+	@echo
+	@docker pull traefik/whoami
+	@echo
+	@echo "\033[1;34mdocker pull mariadb:10.6-focal\033[0m"
+	@echo
+	@docker pull mariadb:10.6-focal
+	@echo
+	@echo "\033[1;34mdocker pull php:7.4-fpm-alpine\033[0m"
+	@echo
+	@docker pull php:7.4-fpm-alpine
+	@echo
+	@echo "\033[1;34mdocker pull php:8.1-fpm-alpine\033[0m"
+	@echo
+	@docker pull php:8.1-fpm-alpine
+	@echo
+	@echo "\033[1;34mdocker pull traefik:2.9\033[0m"
+	@echo
+	@docker pull traefik:2.9
+	@echo
+
 docker-build-php:
 	@echo
 	@echo "\033[1;34mdocker build images/php-fpm-8.1/ -t phpughh/php-fpm:8.1\033[0m"
@@ -343,6 +370,13 @@ k8s-traefik-ingress:
 	@kubectl apply -f kubernetes/ingresses/traefik-ingress.yaml
 	@echo
 
+k8s-traefik-ingressroute:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingressroutes/traefik-ingressroute.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/ingressroutes/traefik-ingressroute.yaml
+	@echo
+
 k8s-traefik-rolebinding:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/rolebindings/traefik-rolebinding.yaml\033[0m"
@@ -368,6 +402,17 @@ k8s-traefik-service:
 	@kubectl apply -f kubernetes/services/traefik-ingress-service.yaml
 	@echo
 
+k8s-traefik-service-crd:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/traefik-dashboard-service.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/services/traefik-dashboard-service.yaml
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/traefik-ingress-service-crd.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/services/traefik-ingress-service-crd.yaml
+	@echo
+
 k8s-traefik-serviceaccount:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/serviceaccounts/traefik-account.yaml\033[0m"
@@ -377,9 +422,9 @@ k8s-traefik-serviceaccount:
 
 k8s-traefik-serviceaccount-crd:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/serviceaccounts/traefik-account-crd.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/serviceaccounts/traefik-ingress-controller.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/serviceaccounts/traefik-account-crd.yaml
+	@kubectl apply -f kubernetes/serviceaccounts/traefik-ingress-controller.yaml
 	@echo
 
 k8s-whoami-deployment:
@@ -396,6 +441,13 @@ k8s-whoami-ingress:
 	@kubectl apply -f kubernetes/ingresses/whoami-ingress.yaml
 	@echo
 
+k8s-whoami-ingressroute:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingressroutes/whoami-ingressroute.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/ingressroutes/whoami-ingressroute.yaml
+	@echo
+
 k8s-whoami-service:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-whoami.yaml\033[0m"
@@ -410,6 +462,13 @@ k8s-wordpress-configmap:
 	@kubectl create configmap wordpress-config --from-file=configs/nginx/wordpress-k8s.conf --from-file=configs/wordpress/wp-config-k8s.php
 	@echo
 
+k8s-wordpress-configmap-cdr:
+	@echo
+	@echo "\033[1;34mkubectl create configmap wordpress-config-cdr --from-file=configs/wordpress/config_static_k8s.yml --from-file=configs/wordpress/wp-config-k8s-cdr.php\033[0m"
+	@echo
+	@kubectl create configmap wordpress-config-cdr --from-file=configs/nginx/wordpress-k8s.conf --from-file=configs/wordpress/wp-config-k8s-cdr.php
+	@echo
+
 k8s-wordpress-deployment:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/deployments/wordpress-deployment.yaml\033[0m"
@@ -417,11 +476,25 @@ k8s-wordpress-deployment:
 	@kubectl apply -f kubernetes/deployments/wordpress-deployment.yaml
 	@echo
 
+k8s-wordpress-deployment-cdr:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/deployments/wordpress-deployment-cdr.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/deployments/wordpress-deployment-cdr.yaml
+	@echo
+
 k8s-wordpress-ingress:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/ingresses/wordpress-ingress.yaml\033[0m"
 	@echo
 	@kubectl apply -f kubernetes/ingresses/wordpress-ingress.yaml
+	@echo
+
+k8s-wordpress-ingressroute:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingressroutes/wordpress-ingressroute.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/ingressroutes/wordpress-ingressroute.yaml
 	@echo
 
 k8s-wordpress-service:
@@ -457,6 +530,20 @@ k8s-mariadb-service:
 	@echo "\033[1;34mkubectl apply -f kubernetes/services/mariadb-service.yaml\033[0m"
 	@echo
 	@kubectl apply -f kubernetes/services/mariadb-service.yaml
+	@echo
+
+k8s-mariadb-service-crd:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/mariadb-service-crd.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/services/mariadb-service-crd.yaml
+	@echo
+
+k8s-mariadb-ingressroute:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingressroutes/mariadb-ingressroute.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/ingressroutes/mariadb-ingressroute.yaml
 	@echo
 
 k8s-minikube-dashboard:
@@ -793,7 +880,8 @@ dni: docker-network-inspect
 dl: docker-logs
 dbwp: docker-build-wordpress
 
-dba: dbp dbpd dbp7 dbtr dbmd dbwp
+dba: dpa dbp dbpd dbp7 dbtr dbmd dbwp
+dpa: docker-pull-all
 dbp: docker-build-php
 dbpd: docker-build-php-dev
 dbp7: docker-build-php-7.4
@@ -831,31 +919,31 @@ k8mks: k8s-minikube-start
 k8mkt: k8s-minikube-tunnel
 
 k8trcd: k8s-traefik-configmap-describe
-k8trcm: k8s-traefik-configmap
-k8trcm2: k8s-traefik-configmap-crd
+k8trcm: k8s-traefik-configmap-crd
 k8trcr: k8s-traefik-clusterrole
 k8trcrd: k8s-traefik-custom-resource
-k8trdp: k8s-traefik-deployment
-k8trdp2: k8s-traefik-deployment-crd
+k8trdp: k8s-traefik-deployment-crd
 k8trig: k8s-traefik-ingress
-k8trrb: k8s-traefik-rolebinding
-k8trrb2: k8s-traefik-rolebinding-online
-k8trsa: k8s-traefik-serviceaccount
-k8trsa2: k8s-traefik-serviceaccount-crd
-k8trsv: k8s-traefik-service
+k8trir: k8s-traefik-ingressroute
+k8trrb: k8s-traefik-rolebinding-online
+k8trsa: k8s-traefik-serviceaccount-crd
+k8trsv: k8s-traefik-service-crd
 
 k8trsu: k8trsa k8trcr k8trrb k8trdp
 
 k8widp: k8s-whoami-deployment
 k8wiig: k8s-whoami-ingress
+k8wiir: k8s-whoami-ingressroute
 k8wisv: k8s-whoami-service
 
 k8mdsc: k8s-mariadb-secret
 k8mdvl: k8s-mariadb-volume
 k8mddp: k8s-mariadb-deployment
-k8mdsv: k8s-mariadb-service
+k8mdsv: k8s-mariadb-service-crd
+k8mdir: k8s-mariadb-ingressroute
 
-k8wpdp: k8s-wordpress-deployment
+k8wpdp: k8s-wordpress-deployment-cdr
 k8wpig: k8s-wordpress-ingress
+k8wpir: k8s-wordpress-ingressroute
 k8wpsv: k8s-wordpress-service
-k8wpcm: k8s-wordpress-configmap
+k8wpcm: k8s-wordpress-configmap-cdr

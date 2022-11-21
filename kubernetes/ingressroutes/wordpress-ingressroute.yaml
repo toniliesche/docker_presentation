@@ -5,15 +5,14 @@ metadata:
 
 spec:
   entryPoints:
-    - web
+    - http
   routes:
     - match: Host(`wordpress.phpug.hh`)
       kind: Rule
       middlewares:
-        - name: middleware1
-          namespace: default
+        - name: access-log@file
+        - name: x-requestid@file
       services:
       - name: wordpress-service
         kind: Service
-        port:
-          name: web
+        port: 80
