@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: wordpress-ingressroute
+
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`wordpress.phpug.hh`)
+      kind: Rule
+      middlewares:
+        - name: middleware1
+          namespace: default
+      services:
+      - name: wordpress-service
+        kind: Service
+        port:
+          name: web

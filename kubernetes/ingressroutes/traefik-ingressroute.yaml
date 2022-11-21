@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-ingressroute
+
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`traefik.phpug.hh`)
+      kind: Rule
+      services:
+      - name: traefik-dashboard-service
+        kind: Service
+        port:
+          name: dashboard

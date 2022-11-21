@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: whoami-ingress-service
+  name: whoami-service
 spec:
   type: ClusterIP
   ports:

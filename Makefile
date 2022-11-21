@@ -287,6 +287,13 @@ k8s-traefik-configmap:
 	@kubectl create configmap traefik-config --from-file=configs/traefik/config_static_k8s.yml --from-file=configs/traefik/config_dynamic_extended.yml
 	@echo
 
+k8s-traefik-configmap-crd:
+	@echo
+	@echo "\033[1;34mkubectl create configmap traefik-config-crd --from-file=configs/traefik/config_static_k8s_crd.yml --from-file=configs/traefik/config_dynamic_extended.yml\033[0m"
+	@echo
+	@kubectl create configmap traefik-config-crd --from-file=configs/traefik/config_static_k8s_crd.yml --from-file=configs/traefik/config_dynamic_extended.yml
+	@echo
+
 k8s-traefik-configmap-describe:
 	@echo
 	@echo "\033[1;34mkubectl describe configmap traefik-config\033[0m"
@@ -296,69 +303,104 @@ k8s-traefik-configmap-describe:
 
 k8s-traefik-clusterrole:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-clusterrole-traefik.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/clusterroles/traefik-role.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-clusterrole-traefik.yaml
+	@kubectl apply -f kubernetes/clusterroles/traefik-role.yaml
+	@echo
+
+k8s-traefik-custom-resource:
+	@echo
+	@echo "\033[1;34mkubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml\033[0m"
+	@echo
+	@kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml
+	@echo
+
+k8s-traefik-rbac:
+	@echo
+	@echo "\033[1;34mkubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml\033[0m"
+	@echo
+	@kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
 	@echo
 
 k8s-traefik-deployment:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-traefik.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-deployment-traefik.yaml
+	@kubectl apply -f kubernetes/deployments/traefik-deployment.yaml
+	@echo
+
+k8s-traefik-deployment-crd:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-traefik-crd.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/deployments/traefik-deployment-crd.yaml
 	@echo
 
 k8s-traefik-ingress:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-traefik.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingresses/traefik-ingress.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-ingress-traefik.yaml
+	@kubectl apply -f kubernetes/ingresses/traefik-ingress.yaml
 	@echo
 
 k8s-traefik-rolebinding:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-rolebinding-traefik.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/rolebindings/traefik-rolebinding.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-rolebinding-traefik.yaml
+	@kubectl apply -f kubernetes/rolebindings/traefik-rolebinding.yaml
+	@echo
+
+k8s-traefik-rolebinding-online:
+	@echo
+	@echo "\033[1;34mkubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml\033[0m"
+	@echo
+	@kubectl apply -f https://raw.githubusercontent.com/traefik/traefik/v2.9/docs/content/reference/dynamic-configuration/kubernetes-crd-rbac.yml
 	@echo
 
 k8s-traefik-service:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-traefik-dashboard.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/traefik-dashboard-service.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-service-traefik-dashboard.yaml
+	@kubectl apply -f kubernetes/services/traefik-dashboard-service.yaml
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-traefik-loadbalancer.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/traefik-ingress-service.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-service-traefik-loadbalancer.yaml
+	@kubectl apply -f kubernetes/services/traefik-ingress-service.yaml
 	@echo
 
 k8s-traefik-serviceaccount:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-serviceaccount-traefik.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/serviceaccounts/traefik-account.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-serviceaccount-traefik.yaml
+	@kubectl apply -f kubernetes/serviceaccounts/traefik-account.yaml
+	@echo
+
+k8s-traefik-serviceaccount-crd:
+	@echo
+	@echo "\033[1;34mkubectl apply -f kubernetes/serviceaccounts/traefik-account-crd.yaml\033[0m"
+	@echo
+	@kubectl apply -f kubernetes/serviceaccounts/traefik-account-crd.yaml
 	@echo
 
 k8s-whoami-deployment:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-whoami.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/deployments/whoami-deployment.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-deployment-whoami.yaml
+	@kubectl apply -f kubernetes/deployments/whoami-deployment.yaml
 	@echo
 
 k8s-whoami-ingress:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-whoami.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingresses/whoami-ingress.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-ingress-whoami.yaml
+	@kubectl apply -f kubernetes/ingresses/whoami-ingress.yaml
 	@echo
 
 k8s-whoami-service:
 	@echo
 	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-whoami.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-service-whoami.yaml
+	@kubectl apply -f kubernetes/services/whoami-service.yaml
 	@echo
 
 k8s-wordpress-configmap:
@@ -370,58 +412,51 @@ k8s-wordpress-configmap:
 
 k8s-wordpress-deployment:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-wordpress.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/deployments/wordpress-deployment.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-deployment-wordpress.yaml
+	@kubectl apply -f kubernetes/deployments/wordpress-deployment.yaml
 	@echo
 
 k8s-wordpress-ingress:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-wordpress.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/ingresses/wordpress-ingress.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-ingress-wordpress.yaml
+	@kubectl apply -f kubernetes/ingresses/wordpress-ingress.yaml
 	@echo
 
 k8s-wordpress-service:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-wordpress.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/wordpress-service.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-service-wordpress.yaml
+	@kubectl apply -f kubernetes/services/wordpress-service.yaml
 	@echo
 
 k8s-mariadb-secret:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-secret-mariadb.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/secrets/mariadb-secret.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-secret-mariadb.yaml
+	@kubectl apply -f kubernetes/secrets/mariadb-secret.yaml
 	@echo
 
 k8s-mariadb-volume:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-pvclaim-mariadb.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/pvclaims/mariadb-volume.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-pvclaim-mariadb.yaml
+	@kubectl apply -f kubernetes/pvclaims/mariadb-volume.yaml
 	@echo
 
 k8s-mariadb-deployment:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-deployment-mariadb.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/deployments/mariadb-deployment.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-deployment-mariadb.yaml
-	@echo
-
-k8s-mariadb-ingress:
-	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-ingress-mariadb.yaml\033[0m"
-	@echo
-	@kubectl apply -f kubernetes/k8s-ingress-mariadb.yaml
+	@kubectl apply -f kubernetes/deployments/mariadb-deployment.yaml
 	@echo
 
 k8s-mariadb-service:
 	@echo
-	@echo "\033[1;34mkubectl apply -f kubernetes/k8s-service-mariadb.yaml\033[0m"
+	@echo "\033[1;34mkubectl apply -f kubernetes/services/mariadb-service.yaml\033[0m"
 	@echo
-	@kubectl apply -f kubernetes/k8s-service-mariadb.yaml
+	@kubectl apply -f kubernetes/services/mariadb-service.yaml
 	@echo
 
 k8s-minikube-dashboard:
@@ -569,6 +604,13 @@ nginx-run-detached:
 	@echo "\033[1;34mdocker run --name nginx --rm -p 80:80 -d nginx:1.23-alpine\033[0m"
 	@echo
 	@docker run --name nginx --rm -p 80:80 -d nginx:1.23-alpine
+	@echo
+
+nginx-run-apparmor:
+	@echo
+	@echo "\033[1;34mdocker run --name nginx --security-opt "apparmor=docker-nginx" --rm -p 80:80 -d nginx:1.23-alpine\033[0m"
+	@echo
+	@docker run --name nginx --security-opt "apparmor=docker-nginx" --rm -p 80:80 -d nginx:1.23-alpine
 	@echo
 
 nginx-stop:
@@ -720,6 +762,7 @@ endif
 ngxr: nginx-run
 ngxrp: nginx-run-published
 ngxrd: nginx-run-detached
+ngxraa: nginx-run-apparmor
 ngxs: nginx-stop
 ngxi: nginx-inspect
 ngxin: nginx-inspect-network
@@ -789,11 +832,16 @@ k8mkt: k8s-minikube-tunnel
 
 k8trcd: k8s-traefik-configmap-describe
 k8trcm: k8s-traefik-configmap
+k8trcm2: k8s-traefik-configmap-crd
 k8trcr: k8s-traefik-clusterrole
+k8trcrd: k8s-traefik-custom-resource
 k8trdp: k8s-traefik-deployment
+k8trdp2: k8s-traefik-deployment-crd
 k8trig: k8s-traefik-ingress
 k8trrb: k8s-traefik-rolebinding
+k8trrb2: k8s-traefik-rolebinding-online
 k8trsa: k8s-traefik-serviceaccount
+k8trsa2: k8s-traefik-serviceaccount-crd
 k8trsv: k8s-traefik-service
 
 k8trsu: k8trsa k8trcr k8trrb k8trdp
@@ -806,7 +854,6 @@ k8mdsc: k8s-mariadb-secret
 k8mdvl: k8s-mariadb-volume
 k8mddp: k8s-mariadb-deployment
 k8mdsv: k8s-mariadb-service
-k8mdig: k8s-mariadb-ingress
 
 k8wpdp: k8s-wordpress-deployment
 k8wpig: k8s-wordpress-ingress

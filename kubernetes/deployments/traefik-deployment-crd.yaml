@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: traefik-deployment
+  labels:
+    app: traefik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik-ingress-controller
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: traefik
+          image: phpughh/traefik:2.9
+          ports:
+            - name: web
+              containerPort: 80
+            - name: rdbms
+              containerPort: 3306
+            - name: dashboard
+              containerPort: 8080
+          volumeMounts:
+            - name: config-volume
+              mountPath: /traefik-config
+          args:
+            - --configfile=/traefik-config/static.yml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: traefik-config-crd
+            items:
+              - key: config_static_k8s_crd.yml
+                path: static.yml
+              - key: config_dynamic_extended.yml
+                path: dynamic.yml

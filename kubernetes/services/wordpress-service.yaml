@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: wordpress-ingress-service
+  name: wordpress-service
 spec:
   type: ClusterIP
   ports:

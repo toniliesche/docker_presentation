@@ -7,12 +7,16 @@ entryPoints:
     address: ":80"
     forwardedHeaders:
       insecure: true
+  mariadb:
+    address: ":3306"
 
 log:
   level: "DEBUG"
 
 providers:
   kubernetesIngress: {}
+  kubernetesCRD:
+    endpoint: "http://localhost:8080"
   file:
     filename: /traefik-config/dynamic.yml
 

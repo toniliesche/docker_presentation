@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: mariadb-ingressroute
+
+spec:
+  entryPoints:
+    - mariadb
+  routes:
+    - match: HostSNI(`*`)
+      priority: 10
+      services:
+        - name: mariadb-service
+          port:
+            name: dashboard
