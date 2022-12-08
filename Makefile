@@ -187,6 +187,13 @@ docker-build-wordpress:
 	@DOCKER_BUILDKIT=1 docker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3
 	@echo
 
+docker-history:
+	@echo
+	@echo "\033[1;34mdocker history phpughh/mariadb:10.6\033[0m"
+	@echo
+	@docker history phpughh/mariadb:10.6
+	@echo
+
 docker-images:
 	@echo
 	@echo "\033[1;34mdocker images\033[0m"
@@ -871,6 +878,7 @@ mds: mariadb-stop
 md: mariadb
 
 di: docker-images
+dh: docker-history
 dbmd: docker-build-mariadb
 dps: docker-ps
 dpsa: docker-psa
