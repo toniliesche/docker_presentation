@@ -1,0 +1,4 @@
+xdebug.client_host=__PLACEHOLDER__XDEBUGHOST
+xdebug.client_port=__PLACEHOLDER__XDEBUGPORT
+xdebug.mode=develop,debug
+xdebug.idekey=PhpStorm

@@ -10,7 +10,5 @@ services:
 
   php-dev:
     build:
-      context: ../images/php-fpm-dev
-      args:
-        php_version: 7.4
+      context: ../images/php-fpm-dev-7.4
     image: phpughh/php-fpm:7.4-dev

@@ -1,9 +1,9 @@
-FROM phpughh/php-fpm:8.1
+FROM phpughh/php-fpm:7.4
 
 RUN apk add --no-cache linux-headers && \
  mkdir -p /tmp/pear && \
  cd /tmp/pear && \
- pecl bundle xdebug && \
+ pecl bundle xdebug-3.1.6 && \
  docker-php-ext-install /tmp/pear/xdebug && \
  rm -Rf /tmp/pear
 

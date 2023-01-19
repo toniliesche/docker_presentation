@@ -16,6 +16,8 @@ services:
     networks:
       default:
         aliases:
+          - wordpress-81.phpug.hh
+          - wordpress-74.phpug.hh
           - mariadb.phpughh
           - mariadb.phpughh.internal
     configs:
