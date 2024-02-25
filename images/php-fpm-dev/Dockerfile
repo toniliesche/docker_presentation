@@ -1,5 +1,5 @@
 ARG php_version=8.1
-FROM phpughh/php-fpm:${php_version}
+FROM phpughh/docker/php-fpm:${php_version}
 
 RUN mkdir -p /tmp/pear && \
  cd /tmp/pear && \

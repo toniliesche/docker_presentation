@@ -1,5 +1,5 @@
 ARG wordpress_version
-FROM phpughh/wordpress-php:${wordpress_version}
+FROM phpughh/docker/wordpress-php:${wordpress_version}
 
 FROM nginx:1.23-alpine
 

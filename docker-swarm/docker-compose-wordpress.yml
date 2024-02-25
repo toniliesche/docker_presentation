@@ -19,7 +19,7 @@ configs:
 services:
   nginx:
     hostname: nginx
-    image: phpughh/wordpress-nginx:6.0.3
+    image: phpughh/docker/wordpress-nginx:6.0.3
     deploy:
       mode: replicated
       replicas: 1
@@ -58,7 +58,7 @@ services:
 
   php:
     hostname: php
-    image: phpughh/wordpress-php:6.0.3
+    image: phpughh/docker/wordpress-php:6.0.3
     networks:
       - default
     configs:

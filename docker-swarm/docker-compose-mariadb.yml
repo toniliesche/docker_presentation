@@ -9,7 +9,7 @@ networks:
 services:
   mariadb:
     hostname: mariadb
-    image: phpughh/mariadb:10.6
+    image: phpughh/docker/mariadb:10.6
     deploy:
       mode: replicated
       replicas: 1

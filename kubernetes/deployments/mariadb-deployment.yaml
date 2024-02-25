@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mariadb
-          image: phpughh/mariadb:10.6
+          image: phpughh/docker/mariadb:10.6
           ports:
             - name: rdbms
               containerPort: 3306

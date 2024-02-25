@@ -112,9 +112,9 @@ docker-build: docker-build-php docker-build-php-dev docker-build-php-7.4 docker-
 
 docker-build-mariadb:
 	@echo
-	@echo "\033[1;34mdocker build images/mariadb/ -t phpughh/mariadb:10.6\033[0m"
+	@echo "\033[1;34mdocker build images/mariadb/ -t phpughh/docker/mariadb:10.6\033[0m"
 	@echo
-	@docker build images/mariadb/ -t phpughh/mariadb:10.6
+	@docker build images/mariadb/ -t phpughh/docker/mariadb:10.6
 	@echo
 
 docker-pull-all:
@@ -146,9 +146,9 @@ docker-pull-all:
 
 docker-build-php:
 	@echo
-	@echo "\033[1;34mdocker build images/php-fpm-8.1/ -t phpughh/php-fpm:8.1\033[0m"
+	@echo "\033[1;34mdocker build images/php-fpm-8.1/ -t phpughh/docker/php-fpm:8.1\033[0m"
 	@echo
-	@docker build images/php-fpm-8.1/ -t phpughh/php-fpm:8.1
+	@docker build images/php-fpm-8.1/ -t phpughh/docker/php-fpm:8.1
 	@echo
 
 docker-build-php-7.4:
@@ -164,27 +164,27 @@ docker-build-php-7.4:
 
 docker-build-php-dev:
 	@echo
-	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/php-fpm:8.1-dev\033[0m"
+	@echo "\033[1;34mDOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/docker/php-fpm:8.1-dev\033[0m"
 	@echo
-	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/php-fpm:8.1-dev
+	@DOCKER_BUILDKIT=1 docker build images/php-fpm-dev-8.1/ -t phpughh/docker/php-fpm:8.1-dev
 	@echo
 
 docker-build-traefik:
 	@echo
-	@echo "\033[1;34mdocker build images/traefik/ -t phpughh/traefik:2.9\033[0m"
+	@echo "\033[1;34mdocker build images/traefik/ -t phpughh/docker/traefik:2.9\033[0m"
 	@echo
-	@docker build images/traefik/ -t phpughh/traefik:2.9
+	@docker build images/traefik/ -t phpughh/docker/traefik:2.9
 	@echo
 
 docker-build-wordpress:
 	@echo
-	@echo "\033[1;34mdocker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3\033[0m"
+	@echo "\033[1;34mdocker build images/wordpress-php/ -t phpughh/docker/wordpress-php:6.0.3\033[0m"
 	@echo
-	@DOCKER_BUILDKIT=1 docker build images/wordpress-php/ -t phpughh/wordpress-php:6.0.3
+	@DOCKER_BUILDKIT=1 docker build images/wordpress-php/ -t phpughh/docker/wordpress-php:6.0.3
 	@echo
-	@echo "\033[1;34mdocker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3\033[0m"
+	@echo "\033[1;34mdocker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/docker/wordpress-nginx:6.0.3\033[0m"
 	@echo
-	@DOCKER_BUILDKIT=1 docker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/wordpress-nginx:6.0.3
+	@DOCKER_BUILDKIT=1 docker build --build-arg wordpress_version=6.0.3 images/wordpress-nginx/ -t phpughh/docker/wordpress-nginx:6.0.3
 	@echo
 
 docker-history:

@@ -6,9 +6,9 @@ services:
       context: ../images/php-fpm
       args:
         php_version: 7.4
-    image: phpughh/php-fpm:7.4
+    image: phpughh/docker/php-fpm:7.4
 
   php-dev:
     build:
       context: ../images/php-fpm-dev-7.4
-    image: phpughh/php-fpm:7.4-dev
+    image: phpughh/docker/php-fpm:7.4-dev

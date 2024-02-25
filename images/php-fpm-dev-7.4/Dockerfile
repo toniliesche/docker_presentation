@@ -1,4 +1,4 @@
-FROM phpughh/php-fpm:7.4
+FROM phpughh/docker/php-fpm:7.4
 
 RUN apk add --no-cache linux-headers && \
  mkdir -p /tmp/pear && \

@@ -14,7 +14,7 @@ configs:
 services:
   traefik:
     hostname: traefik
-    image: phpughh/traefik:2.9
+    image: phpughh/docker/traefik:2.9
     deploy:
       mode: replicated
       replicas: 1

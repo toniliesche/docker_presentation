@@ -46,7 +46,7 @@ services:
 
   php:
     hostname: php
-    image: phpughh/php-fpm:8.1
+    image: phpughh/docker/php-fpm:8.1
     depends_on:
       - mariadb
     volumes:

@@ -16,7 +16,7 @@ configs:
 services:
   mariadb:
     hostname: mariadb
-    image: phpughh/mariadb:10.6
+    image: phpughh/docker/mariadb:10.6
     volumes:
       - wordpress_mariadb_data:/var/lib/mysql
     networks:
@@ -56,7 +56,7 @@ services:
 
   php:
     hostname: php
-    image: phpughh/php-fpm:8.1-dev
+    image: phpughh/docker/php-fpm:8.1-dev
     depends_on:
       - mariadb
     volumes:
